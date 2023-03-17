@@ -1,0 +1,60 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# database
+/prisma/db.sqlite
+/prisma/db.sqlite-journal
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+# do not commit any .env files to git, except for the .env.example file. https://create.t3.gg/en/usage/env-variables#using-environment-variables
+.env
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+
+# Avoid accidental upload of the Sketch and Figma design files
+#####################################################
+## Please do not remove lines 5 and 6 - thanks! 🙂 ##
+#####################################################
+*.sketch
+*.fig
+
+# Avoid accidental XD upload if you convert the design file
+###############################################
+## Please do not remove line 12 - thanks! 🙂 ##
+###############################################
+*.xd
+
+# Avoid your project being littered with annoying .DS_Store files!
+.DS_Store
+.prettierignore
+figma
