@@ -19,6 +19,7 @@ const config = {
         500: "rgb(12, 14, 22)",
         600: "rgb(248, 248, 251)",
         700: "rgb(20, 22, 37)",
+        800: "rgb(235, 231, 231)",
       },
       accent: {
         100: "rgb(236, 87, 87)",
@@ -26,6 +27,7 @@ const config = {
       },
       white: "#fff",
       black: "#000",
+      transparent: "transparent",
     },
     extend: {},
   },

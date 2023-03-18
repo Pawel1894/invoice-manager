@@ -12,9 +12,9 @@ const spartan = League_Spartan({
 
 export default function Layout({ children }: Props) {
   return (
-    <>
-      <header className={`${spartan.variable} font-sans`}></header>
+    <div>
+      <aside className={`${spartan.variable} font-sans`}></aside>
       <main className={`${spartan.variable} font-sans`}>{children}</main>
-    </>
+    </div>
   );
 }

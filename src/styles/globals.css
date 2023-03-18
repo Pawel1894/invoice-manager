@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    overflow-x: hidden;
+    min-height: 100vh;
+    @apply bg-neutral-600 font-medium;
+  }
+
+  body.dark {
+    @apply bg-neutral-700;
+  }
+
+  *:focus {
+    box-shadow: 0px 0px 0px 5px rgba(171, 248, 228, 0.6);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+}
