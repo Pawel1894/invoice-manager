@@ -21,6 +21,10 @@ const server = z.object({
   // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
+  EMAIL_FROM: z.string(),
+  EMAIL_SERVER_USER: z.string(),
+  EMAIL_SERVER_PASSWORD: z.string(),
+  EMAIL_SERVER_PORT: z.string(),
 });
 
 /**
@@ -44,6 +48,10 @@ const processEnv = {
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  EMAIL_FROM: process.env.EMAIL_FROM,
+  EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
+  EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
+  EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 
