@@ -62,7 +62,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${spartan.variable} font-sans`}>
-        <h1 className="mb-16 pt-32 text-center text-5xl">
+        <h1 id="title" className="mb-16 pt-32 text-center text-5xl">
           Sign in to{" "}
           <mark className="bg-transparent text-primary-100">Invoices</mark>{" "}
           Manager
@@ -77,8 +77,13 @@ const Home: NextPage = () => {
         ) : (
           <div className="mx-auto max-w-md px-2">
             <button
+              id="google-login"
               className="flex w-full items-center justify-center gap-x-4 rounded border-4 border-primary-100 px-3 py-2 text-2xl text-primary-100  hover:shadow-lg"
-              onClick={() => void signIn("google")}
+              onClick={() =>
+                void signIn("google", {
+                  callbackUrl: `${window.location.origin}/invoice`,
+                })
+              }
             >
               <Image
                 src={"/assets/icon-ms.svg"}
@@ -103,6 +108,7 @@ const Home: NextPage = () => {
                   }`}
                   type={"text"}
                   placeholder="name@email.com"
+                  data-testid="email-input"
                 />
                 {error ? (
                   <span className="absolute bottom-full left-0 text-sm text-accent-100">
@@ -111,6 +117,7 @@ const Home: NextPage = () => {
                 ) : null}
               </div>
               <button
+                data-testid="email-btn"
                 onClick={emailLoginHandler}
                 className="mt-4 flex w-full items-center justify-center gap-x-4  rounded bg-primary-100 px-3 py-2 text-2xl  text-white hover:shadow-lg"
               >

@@ -58,3 +58,4 @@ yarn-error.log*
 .DS_Store
 .prettierignore
 figma
+cypress.env.json
