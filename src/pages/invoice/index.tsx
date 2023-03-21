@@ -4,8 +4,13 @@ import { useRouter } from "next/router";
 import React from "react";
 import Layout from "~/components/Layout";
 import LoadIndicator from "~/components/LoadIndicator";
+import { type NextApiRequest, type NextApiResponse } from "next";
+import superjson from "superjson";
+import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import { appRouter } from "~/server/api/root";
+import { createTRPCContext } from "~/server/api/trpc";
 
-export default function Invoice() {
+export default function Invoice({ isDarkMode }: { isDarkMode: boolean }) {
   const { data, status } = useSession();
   const router = useRouter();
 
@@ -30,10 +35,31 @@ export default function Invoice() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {status === "authenticated" ? (
-        <Layout>
+        <Layout isDarkMode={isDarkMode}>
           <span>test</span>
         </Layout>
       ) : null}
     </>
   );
 }
+
+export const getServerSideProps = async ({
+  req,
+  res,
+}: {
+  req: NextApiRequest;
+  res: NextApiResponse;
+}) => {
+  const ssg = createProxySSGHelpers({
+    router: appRouter,
+    ctx: await createTRPCContext({
+      req: req,
+      res: res,
+    }),
+    transformer: superjson,
+  });
+
+  const response = await ssg.user.getPrefTheme.fetch();
+
+  return { props: { isDarkMode: response?.darkMode } };
+};

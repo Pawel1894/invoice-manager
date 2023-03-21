@@ -5,6 +5,7 @@ import User from "./User";
 
 type Props = {
   children: JSX.Element;
+  isDarkMode: boolean;
 };
 
 const spartan = League_Spartan({
@@ -13,7 +14,7 @@ const spartan = League_Spartan({
   variable: "--font-spartan",
 });
 
-export default function Layout({ children }: Props) {
+export default function Layout({ children, isDarkMode }: Props) {
   return (
     <div>
       <aside
@@ -29,7 +30,7 @@ export default function Layout({ children }: Props) {
           </div>
         </div>
         <div className="flex gap-6 md:flex-col md:items-center md:pb-6">
-          <ThemeToggler />
+          <ThemeToggler isDarkMode={isDarkMode} />
           <User />
         </div>
       </aside>

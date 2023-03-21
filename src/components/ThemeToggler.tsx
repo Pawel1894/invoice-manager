@@ -1,29 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-export default function ThemeToggler() {
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+import { api } from "~/utils/api";
 
-  useEffect(() => {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      changeToDarkMode();
-    } else {
-      changeToLightMode();
+export default function ThemeToggler({ isDarkMode }: { isDarkMode: boolean }) {
+  const { data: userPref, refetch } = api.user.getPrefTheme.useQuery(
+    undefined,
+    {
+      initialData: () => {
+        if (isDarkMode)
+          document.getElementsByTagName("body")[0]?.classList.add("dark");
+        return isDarkMode;
+      },
     }
-  }, []);
+  );
+  const { mutate: updateTheme } = api.user.setPrefTheme.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   function changeToDarkMode() {
     document.getElementsByTagName("body")[0]?.classList.add("dark");
-    setIsDarkTheme(true);
+    updateTheme(true);
   }
 
   function changeToLightMode() {
     document.getElementsByTagName("body")[0]?.classList.remove("dark");
-    setIsDarkTheme(false);
+    updateTheme(false);
   }
 
   return (
     <button className="group" title="change theme colors">
-      {isDarkTheme ? (
+      {userPref?.darkMode ? (
         <svg
           width="20"
           height="20"
