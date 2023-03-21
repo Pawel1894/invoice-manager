@@ -1,7 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function ThemeToggler() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      changeToDarkMode();
+    } else {
+      changeToLightMode();
+    }
+  }, []);
 
   function changeToDarkMode() {
     document.getElementsByTagName("body")[0]?.classList.add("dark");
