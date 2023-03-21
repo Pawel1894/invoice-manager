@@ -9,10 +9,10 @@ export default function User() {
     useClickOutside<HTMLDivElement>(false);
 
   return (
-    <div className="relative border-l border-l-[#494E6E] px-6 md:mx-auto md:w-full md:border-l-0 md:border-t md:border-t-[#494E6E] md:pt-6">
+    <div className="relative border-l border-l-[#494E6E]  md:mx-auto md:w-full md:border-l-0 md:border-t md:border-t-[#494E6E] ">
       <button
         onClick={() => setIsComponentVisible(true)}
-        className="h-full w-full"
+        className="h-full w-full px-6 md:px-0 md:pt-6"
       >
         <img
           className="h-8 w-8 rounded-full md:mx-auto md:h-10 md:w-10"
