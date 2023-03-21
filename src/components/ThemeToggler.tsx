@@ -1,20 +1,32 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import React from "react";
 
 import { api } from "~/utils/api";
 
 export default function ThemeToggler({ isDarkMode }: { isDarkMode: boolean }) {
-  const { data: userPref, refetch } = api.user.getPrefTheme.useQuery(
-    undefined,
-    {
-      initialData: () => {
-        if (isDarkMode)
-          document.getElementsByTagName("body")[0]?.classList.add("dark");
-        return isDarkMode;
-      },
-    }
-  );
+  const queryClient = useQueryClient();
+  const { data: userPref } = api.user.getPrefTheme.useQuery(undefined, {
+    initialData: () => {
+      if (isDarkMode)
+        document.getElementsByTagName("body")[0]?.classList.add("dark");
+      return isDarkMode;
+    },
+  });
   const { mutate: updateTheme } = api.user.setPrefTheme.useMutation({
-    onSuccess: () => refetch(),
+    onMutate: (input: boolean) => {
+      const key = getQueryKey(api.user.getPrefTheme);
+      queryClient.setQueryData(key, input);
+
+      return { prev: !input, key };
+    },
+    onError: (err, input, context) => {
+      if (context?.key) queryClient.setQueryData(context?.key, context?.prev);
+    },
+    onSettled: async () => {
+      const key = getQueryKey(api.user.getPrefTheme);
+      await queryClient.invalidateQueries({ queryKey: key });
+    },
   });
 
   function changeToDarkMode() {
