@@ -1,39 +1,28 @@
 /// <reference types="cypress" />
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+export {};
 
-// cypress/support/commands.ts
+Cypress.Commands.add("login", () => {
+  const data = {
+    user: {
+      name: "Paweł P",
+      email: "pawepohl@gmail.com",
+      image: null,
+    },
+    expires: "3000-01-01T00:00:00.000Z",
+    accessToken: "abcdefghijklmnopqrst",
+  };
+
+  cy.session(data, () => {
+    cy.setCookie("next-auth.session-token", "valid cookie");
+    cy.setCookie("next-auth.csrf-token", "valid cookie");
+    cy.setCookie("next-auth.callback-url", "valid cookie");
+  });
+});
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(): Chainable<void>;
+    }
+  }
+}

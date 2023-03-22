@@ -7,7 +7,6 @@ export default function User() {
   const { data } = useSession();
   const { isComponentVisible, ref, setIsComponentVisible } =
     useClickOutside<HTMLDivElement>(false);
-
   return (
     <div className="relative border-l border-l-[#494E6E]  md:mx-auto md:w-full md:border-l-0 md:border-t md:border-t-[#494E6E] ">
       <button
@@ -16,7 +15,7 @@ export default function User() {
       >
         <img
           className="h-8 w-8 rounded-full md:mx-auto md:h-10 md:w-10"
-          src={data?.user.image ?? "/assets/image-avatar.jpg"}
+          src={data?.user.image ? data?.user.image : "/assets/image-avatar.jpg"}
           alt={"Your profile"}
         />
       </button>
@@ -30,7 +29,9 @@ export default function User() {
           <div className="grid grid-cols-[64px_1fr] gap-4">
             <img
               className="rounded-full"
-              src={data?.user.image ?? "/assets/image-avatar.jpg"}
+              src={
+                data?.user.image ? data?.user.image : "/assets/image-avatar.jpg"
+              }
               alt={"Your profile"}
               width={64}
               height={64}

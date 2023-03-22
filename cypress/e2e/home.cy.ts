@@ -49,4 +49,11 @@ describe("The Home Page", () => {
       cy.get('input[type="email"]').should("exist");
     });
   });
+  it("Should redirect logged in user to invoice page", () => {
+    cy.login();
+
+    cy.visit("/");
+  });
 });
+
+export {};

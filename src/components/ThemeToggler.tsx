@@ -12,6 +12,7 @@ export default function ThemeToggler({ isDarkMode }: { isDarkMode: boolean }) {
         document.getElementsByTagName("body")[0]?.classList.add("dark");
       return isDarkMode;
     },
+    refetchOnWindowFocus: false,
   });
   const { mutate: updateTheme } = api.user.setPrefTheme.useMutation({
     onMutate: (input: boolean) => {
