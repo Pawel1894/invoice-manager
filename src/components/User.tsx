@@ -10,6 +10,7 @@ export default function User() {
   return (
     <div className="relative border-l border-l-[#494E6E]  md:mx-auto md:w-full md:border-l-0 md:border-t md:border-t-[#494E6E] ">
       <button
+        data-testid="userProfile"
         onClick={() => setIsComponentVisible(true)}
         className="h-full w-full px-6 md:px-0 md:pt-6"
       >
@@ -21,6 +22,7 @@ export default function User() {
       </button>
       {isComponentVisible ? (
         <div
+          data-testid="userPopup"
           ref={ref}
           className={
             "absolute top-[2.5rem] right-4 rounded-3xl bg-white p-4 shadow-lg md:bottom-1/3 md:top-auto md:left-3/4 md:right-auto"

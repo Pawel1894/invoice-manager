@@ -41,7 +41,12 @@ export default function ThemeToggler({ isDarkMode }: { isDarkMode: boolean }) {
   }
 
   return (
-    <button className="group" title="change theme colors">
+    <button
+      data-testid="theme-toggle"
+      data-theme={userPref?.darkMode}
+      className="group"
+      title="change theme colors"
+    >
       {userPref?.darkMode ? (
         <svg
           width="20"
