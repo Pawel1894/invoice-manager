@@ -8,6 +8,8 @@ import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { appRouter } from "~/server/api/root";
 import { createTRPCContext } from "~/server/api/trpc";
 import { api } from "~/utils/api";
+import Filter from "~/components/Filter";
+import Image from "next/image";
 
 export default function Invoice() {
   const { data: theme } = api.user.getPrefTheme.useQuery();
@@ -21,7 +23,33 @@ export default function Invoice() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout isDarkMode={theme?.darkMode ?? false}>
-        <span>test</span>
+        <div>
+          <div className="mx-6 mt-8 flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold leading-none">Invoices</h1>
+              <span className="text-sm text-neutral-400">
+                {invoicesData?.length
+                  ? `${invoicesData.length} invoices`
+                  : "No invoices"}
+              </span>
+            </div>
+            <div className="flex items-center gap-x-4">
+              <Filter />
+              <button className="flex items-center gap-x-2 rounded-3xl bg-primary-100 py-2 pl-2 pr-4 text-sm text-white">
+                <span className="flex items-center justify-center rounded-full bg-white p-3">
+                  <Image
+                    src="/assets/icon-plus.svg"
+                    width={10}
+                    height={10}
+                    alt="create new invoice"
+                  />
+                </span>
+                <span>New</span>
+              </button>
+            </div>
+          </div>
+          <div></div>
+        </div>
       </Layout>
     </>
   );
