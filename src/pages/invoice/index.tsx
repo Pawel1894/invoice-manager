@@ -57,7 +57,7 @@ export default function Invoice() {
             </div>
           </div>
           <div className="mx-auto grid h-[calc(100vh-10.5rem)] max-w-[45.625rem] place-content-center overflow-y-auto overflow-x-hidden">
-            {!invoicesData?.length ? <span>t</span> : <NoInvoices />}
+            {invoicesData?.length ? <span>t</span> : <NoInvoices />}
           </div>
         </div>
       </Layout>
