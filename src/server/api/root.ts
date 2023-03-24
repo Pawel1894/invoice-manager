@@ -1,3 +1,4 @@
+import { invoiceRouter } from "./routers/invoice";
 import { userRouter } from "./routers/user";
 import { createTRPCRouter } from "~/server/api/trpc";
 
@@ -8,6 +9,7 @@ import { createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   user: userRouter,
+  invoice: invoiceRouter,
 });
 
 // export type definition of API
