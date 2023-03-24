@@ -56,6 +56,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     darkMode      Boolean   @default(false)
+    invoices      Invoice[]
 }
 
 model VerificationToken {
@@ -64,4 +65,36 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Invoice {
+    id                  String        @id @default(cuid())
+    number              String
+    invoiceDate         DateTime
+    dueDate             DateTime
+    streetAddress       String
+    city                String
+    postCode            String
+    country             String
+    bankAccount         String
+    clientName          String
+    clientEmail         String
+    clientStreetAddress String
+    clientCity          String
+    clientPostCode      String
+    clientCountry       String
+    decription          String
+    userId              String
+    user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+    items               InvoiceItem[]
+}
+
+model InvoiceItem {
+    id        String  @id @default(cuid())
+    name      String
+    quantity  Int
+    price     Decimal
+    total     Decimal
+    Invoice   Invoice @relation(fields: [invoiceId], references: [id])
+    invoiceId String
 }
