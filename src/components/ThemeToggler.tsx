@@ -6,14 +6,7 @@ import { api } from "~/utils/api";
 
 export default function ThemeToggler({ isDarkMode }: { isDarkMode: boolean }) {
   const queryClient = useQueryClient();
-  const { data: userPref } = api.user.getPrefTheme.useQuery(undefined, {
-    initialData: () => {
-      if (isDarkMode)
-        document.getElementsByTagName("body")[0]?.classList.add("dark");
-      return isDarkMode;
-    },
-    refetchOnWindowFocus: false,
-  });
+
   const { mutate: updateTheme } = api.user.setPrefTheme.useMutation({
     onMutate: (input: boolean) => {
       const key = getQueryKey(api.user.getPrefTheme);
@@ -43,11 +36,11 @@ export default function ThemeToggler({ isDarkMode }: { isDarkMode: boolean }) {
   return (
     <button
       data-testid="theme-toggle"
-      data-theme={userPref?.darkMode}
+      data-theme={isDarkMode}
       className="group"
       title="change theme colors"
     >
-      {userPref?.darkMode ? (
+      {isDarkMode ? (
         <svg
           width="20"
           height="20"

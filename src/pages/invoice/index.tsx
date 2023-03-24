@@ -1,6 +1,6 @@
 import { getSession } from "next-auth/react";
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "~/components/Layout";
 import type { NextApiRequest, NextApiResponse } from "next";
 import superjson from "superjson";
@@ -15,6 +15,12 @@ export default function Invoice() {
   const { data: theme } = api.user.getPrefTheme.useQuery();
   const { data: invoicesData } = api.invoice.getInvoices.useQuery();
 
+  useEffect(() => {
+    if (theme?.darkMode) {
+      document.getElementsByTagName("body")[0]?.classList.add("dark");
+    }
+  }, []);
+
   return (
     <>
       <Head>
@@ -23,11 +29,13 @@ export default function Invoice() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout isDarkMode={theme?.darkMode ?? false}>
-        <div>
-          <div className="mx-6 mt-8 flex items-center justify-between">
+        <div className="mx-6 pt-8 md:mx-12">
+          <div className="mx-auto flex max-w-[45.625rem] items-center justify-between ">
             <div>
-              <h1 className="text-2xl font-bold leading-none">Invoices</h1>
-              <span className="text-sm text-neutral-400">
+              <h1 className="text-2xl font-bold leading-none dark:text-white">
+                Invoices
+              </h1>
+              <span className="text-sm text-neutral-400 dark:text-neutral-800">
                 {invoicesData?.length
                   ? `${invoicesData.length} invoices`
                   : "No invoices"}
@@ -48,7 +56,7 @@ export default function Invoice() {
               </button>
             </div>
           </div>
-          <div></div>
+          <div className="mx-auto max-w-[45.625rem]"></div>
         </div>
       </Layout>
     </>

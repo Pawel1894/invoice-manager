@@ -8,7 +8,7 @@ export default function Filter() {
   return (
     <div className="relative">
       <button
-        className="flex items-center gap-x-3 font-bold text-neutral-500"
+        className="flex items-center gap-x-3 font-bold text-neutral-500 dark:text-white"
         onClick={() => setIsOpen((prevState) => !prevState)}
       >
         <span>
@@ -25,7 +25,7 @@ export default function Filter() {
       <ul
         className={`${
           isOpen ? "block" : "hidden"
-        } absolute left-1/2 top-8 w-48 -translate-x-1/2 rounded-lg bg-white p-4 shadow-md`}
+        } absolute left-1/2 top-8 w-48 -translate-x-1/2 rounded-lg bg-white p-4 shadow-md dark:bg-neutral-200`}
       >
         <li>
           <Checkbox

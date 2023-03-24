@@ -1,6 +1,5 @@
 import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import useClickOutside from "~/hooks/useClickOutside";
 
 export default function User() {
@@ -8,15 +7,19 @@ export default function User() {
   const { isComponentVisible, ref, setIsComponentVisible } =
     useClickOutside<HTMLDivElement>(false);
   return (
-    <div className="relative border-l border-l-[#494E6E]  md:mx-auto md:w-full md:border-l-0 md:border-t md:border-t-[#494E6E] ">
+    <div className="relative border-l border-l-[#494E6E]  lg:mx-auto lg:w-full lg:border-l-0 lg:border-t lg:border-t-[#494E6E] ">
       <button
         data-testid="userProfile"
         onClick={() => setIsComponentVisible(true)}
-        className="h-full w-full px-6 md:px-0 md:pt-6"
+        className="h-full w-full px-6 lg:px-0 lg:pt-6"
       >
         <img
-          className="h-8 w-8 rounded-full md:mx-auto md:h-10 md:w-10"
-          src={data?.user.image ? data?.user.image : "/assets/image-avatar.jpg"}
+          className="rounded-full lg:mx-auto lg:h-10 lg:w-10"
+          src={
+            data?.user.image ? data?.user.image : "/assets/image-avatar.webp"
+          }
+          width={32}
+          height={32}
           alt={"Your profile"}
         />
       </button>
@@ -25,14 +28,16 @@ export default function User() {
           data-testid="userPopup"
           ref={ref}
           className={
-            "absolute top-[2.5rem] right-4 rounded-3xl bg-white p-4 shadow-lg md:bottom-1/3 md:top-auto md:left-3/4 md:right-auto"
+            "absolute top-[2.5rem] right-4 rounded-3xl bg-white p-4 shadow-lg lg:bottom-1/3 lg:top-auto lg:left-3/4 lg:right-auto"
           }
         >
           <div className="grid grid-cols-[64px_1fr] gap-4">
             <img
               className="rounded-full"
               src={
-                data?.user.image ? data?.user.image : "/assets/image-avatar.jpg"
+                data?.user.image
+                  ? data?.user.image
+                  : "/assets/image-avatar.webp"
               }
               alt={"Your profile"}
               width={64}
