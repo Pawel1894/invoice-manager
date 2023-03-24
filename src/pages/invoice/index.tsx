@@ -56,7 +56,9 @@ export default function Invoice() {
               </button>
             </div>
           </div>
-          <div className="mx-auto max-w-[45.625rem]"></div>
+          <div className="mx-auto grid h-[calc(100vh-10.5rem)] max-w-[45.625rem] place-content-center overflow-y-auto overflow-x-hidden">
+            {!invoicesData?.length ? <span>t</span> : <NoInvoices />}
+          </div>
         </div>
       </Layout>
     </>
@@ -99,3 +101,25 @@ export const getServerSideProps = async ({
     },
   };
 };
+
+function NoInvoices() {
+  return (
+    <div className="w-56 text-center md:w-60">
+      <div className="relative mx-auto h-40 w-52 md:h-48 md:w-56">
+        <Image
+          src={"/assets/illustration-empty.svg"}
+          fill
+          alt=""
+          aria-hidden={true}
+        />
+      </div>
+      <h2 className="mt-11 text-2xl font-bold text-neutral-500 dark:text-white">
+        There is nothing here
+      </h2>
+      <p className="mt-5 text-sm text-neutral-400 dark:text-neutral-800">
+        Create an invoice by clicking the <strong>New</strong> button and get
+        started
+      </p>
+    </div>
+  );
+}
