@@ -85,6 +85,8 @@ model Invoice {
     clientCountry       String
     decription          String
     userId              String
+    totalAmount         Float
+    status              Status
     user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
     items               InvoiceItem[]
 }
@@ -93,8 +95,14 @@ model InvoiceItem {
     id        String  @id @default(cuid())
     name      String
     quantity  Int
-    price     Decimal
-    total     Decimal
+    price     Float
+    total     Float
     Invoice   Invoice @relation(fields: [invoiceId], references: [id])
     invoiceId String
+}
+
+enum Status {
+    DRAFT
+    PENDING
+    PAID
 }
