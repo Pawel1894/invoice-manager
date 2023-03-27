@@ -24,12 +24,22 @@ const config = {
       accent: {
         100: "rgb(236, 87, 87)",
         200: "rgb(255, 151, 151)",
+        300: "rgba(133, 139, 178, 1)",
+        400: "rgba(55, 59, 83, 1)",
+        500: "rgba(255, 143, 0, 1)",
+        600: "rgba(255, 143, 0, 0.1)",
+        700: "rgba(51, 214, 159, 1)",
+        800: "rgba(51, 214, 159, 0.1)",
       },
       white: "#fff",
       black: "#000",
       transparent: "transparent",
     },
-    extend: {},
+    extend: {
+      boxShadow: {
+        light: "0px 10px 10px -10px rgba(72, 84, 159, 0.100397);",
+      },
+    },
   },
   plugins: [],
 };

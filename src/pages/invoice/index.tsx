@@ -10,6 +10,7 @@ import { createTRPCContext } from "~/server/api/trpc";
 import { api } from "~/utils/api";
 import Filter from "~/components/Filter";
 import Image from "next/image";
+import InvoiceDisplay from "~/components/Invoice";
 
 export default function Invoice() {
   const { data: theme } = api.user.getPrefTheme.useQuery();
@@ -29,19 +30,25 @@ export default function Invoice() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout isDarkMode={theme?.darkMode ?? false}>
-        <div className="mx-6 pt-8 md:mx-12">
+        <div className="mx-6 pt-8 md:mx-12 lg:pt-20">
           <div className="mx-auto flex max-w-[45.625rem] items-center justify-between ">
             <div>
-              <h1 className="text-2xl font-bold leading-none dark:text-white">
+              <h1 className="text-2xl font-bold leading-none dark:text-white md:text-4xl">
                 Invoices
               </h1>
               <span className="text-sm text-neutral-400 dark:text-neutral-800">
-                {invoicesData?.length
-                  ? `${invoicesData.length} invoices`
-                  : "No invoices"}
+                {invoicesData?.length ? (
+                  invoicesData.length === 1 ? (
+                    <span>1 Invoice</span>
+                  ) : (
+                    <span>invoicesData.length Invoices</span>
+                  )
+                ) : (
+                  "No invoices"
+                )}
               </span>
             </div>
-            <div className="flex items-center gap-x-4">
+            <div className="flex items-center gap-x-4 md:gap-x-11">
               <Filter />
               <button className="flex items-center gap-x-2 rounded-3xl bg-primary-100 py-2 pl-2 pr-4 text-sm text-white">
                 <span className="flex items-center justify-center rounded-full bg-white p-3">
@@ -52,13 +59,23 @@ export default function Invoice() {
                     alt="create new invoice"
                   />
                 </span>
-                <span>New</span>
+                <span>
+                  New <span className="hidden md:inline">Invoice</span>
+                </span>
               </button>
             </div>
           </div>
-          <div className="mx-auto grid h-[calc(100vh-10.5rem)] max-w-[45.625rem] place-content-center overflow-y-auto overflow-x-hidden">
-            {invoicesData?.length ? <span>t</span> : <NoInvoices />}
-          </div>
+          {!invoicesData?.length ? (
+            <div className="mx-auto grid h-[calc(100vh-10.5rem)] max-w-[45.625rem] place-content-center overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-9.5rem)]">
+              <NoInvoices />
+            </div>
+          ) : (
+            <div className="mx-auto mt-8 h-[calc(100vh-14rem)] max-w-[45.625rem] overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-9.5rem)]">
+              {invoicesData.map((invoice) => {
+                return <InvoiceDisplay key={invoice.id} {...invoice} />;
+              })}
+            </div>
+          )}
         </div>
       </Layout>
     </>

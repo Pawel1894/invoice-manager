@@ -28,7 +28,7 @@ export default function User() {
           data-testid="userPopup"
           ref={ref}
           className={
-            "absolute top-[2.5rem] right-4 rounded-3xl bg-white p-4 shadow-lg lg:bottom-1/3 lg:top-auto lg:left-3/4 lg:right-auto"
+            "absolute top-[2.5rem] right-4 rounded-3xl bg-white p-4 shadow-lg dark:bg-neutral-200 dark:text-neutral-800 lg:bottom-1/3 lg:top-auto lg:left-3/4 lg:right-auto"
           }
         >
           <div className="grid grid-cols-[64px_1fr] gap-4">
@@ -60,7 +60,7 @@ export default function User() {
           </div>
           <div className="mt-4 flex w-full items-end justify-end">
             <button
-              className="rounded-3xl text-primary-100"
+              className="rounded-3xl text-primary-100 dark:text-white"
               onClick={() =>
                 void signOut({
                   callbackUrl: window.origin + "/",
