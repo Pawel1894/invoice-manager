@@ -36,25 +36,25 @@ export default function Invoice({
   return (
     <Link
       href={`/invoice/${id}`}
-      className="grid w-full  grid-cols-2 gap-y-2 rounded-lg bg-white p-6 shadow-light dark:bg-neutral-100"
+      className="grid w-full  grid-cols-2 gap-y-2 rounded-lg bg-white p-6 shadow-light dark:bg-neutral-100 md:grid-cols-[2fr_2fr_3fr_2fr_2fr_0.5fr] md:items-center md:justify-items-start"
     >
-      <span className="row-start-1 mb-5 justify-self-start font-bold  dark:text-white">
+      <span className="row-start-1 mb-5 justify-self-start font-bold dark:text-white md:row-auto  md:mb-0 md:justify-self-auto md:text-base">
         <span className="text-accent-300 ">#</span>
         {number}
       </span>
-      <span className="col-span-1 row-start-2 justify-self-start text-sm text-accent-300">
+      <span className="col-span-1 row-start-2 justify-self-start text-sm text-neutral-300 md:col-auto md:row-auto md:justify-self-auto">
         Due {dayjs(dueDate).format("DD MMM YYYY")}
       </span>
-      <span className="col-span-2 row-start-1 justify-self-end text-right text-sm text-accent-300 dark:text-white">
+      <span className="col-span-2 row-start-1 justify-self-end text-right text-sm text-accent-300 dark:text-white md:col-auto md:row-auto md:justify-self-auto md:text-base">
         {clientName}
       </span>
       <span
         title={format(totalAmount, "en-GB")}
-        className="col-start-1 row-start-3 w-full justify-self-start overflow-hidden text-ellipsis whitespace-nowrap text-left dark:text-white"
+        className="md:just-self-a col-start-1 row-start-3 w-full justify-self-start overflow-hidden text-ellipsis whitespace-nowrap text-left dark:text-white md:col-auto md:row-auto md:text-right "
       >
         {format(totalAmount, "en-GB")}
       </span>
-      <div className="row-span-2 flex items-center justify-self-end">
+      <div className="row-span-2 flex items-center justify-self-end md:row-auto md:justify-self-end">
         <div
           className={`rounded-md ${statusStyle[status].bg}  py-2 px-[1.6875rem] `}
         >
@@ -67,7 +67,7 @@ export default function Invoice({
         </div>
       </div>
       <Image
-        className="hidden"
+        className="hidden justify-self-end md:block"
         src={"/assets/icon-arrow-right.svg"}
         width={12}
         height={12}

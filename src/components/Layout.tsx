@@ -35,7 +35,9 @@ export default function Layout({ children, isDarkMode }: Props) {
           <User />
         </div>
       </aside>
-      <main className={`${spartan.variable} font-sans`}>{children}</main>
+      <main className={`${spartan.variable} font-sans lg:ml-[6.4375rem]`}>
+        {children}
+      </main>
     </div>
   );
 }
