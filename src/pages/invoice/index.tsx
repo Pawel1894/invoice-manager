@@ -31,7 +31,7 @@ export default function Invoice() {
       </Head>
       <Layout isDarkMode={theme?.darkMode ?? false}>
         <div className="mx-6 pt-8 md:mx-12 lg:pt-20">
-          <div className="mx-auto flex max-w-[45.625rem] items-center justify-between ">
+          <div className="mx-auto flex max-w-screen-xl items-center justify-between ">
             <div>
               <h1 className="text-2xl font-bold leading-none dark:text-white md:text-4xl">
                 Invoices
@@ -66,11 +66,11 @@ export default function Invoice() {
             </div>
           </div>
           {!invoicesData?.length ? (
-            <div className="mx-auto grid h-[calc(100vh-10.5rem)] max-w-[45.625rem] place-content-center overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-9.5rem)]">
+            <div className="mx-auto grid h-[calc(100vh-10.5rem)] max-w-screen-xl place-content-center overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-9.5rem)]">
               <NoInvoices />
             </div>
           ) : (
-            <div className="mx-auto mt-8 h-[calc(100vh-14rem)] max-w-[45.625rem] overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-9.5rem)]">
+            <div className="mx-auto mt-8 h-[calc(100vh-14rem)] max-w-screen-xl overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-9.5rem)]">
               {invoicesData.map((invoice) => {
                 return <InvoiceDisplay key={invoice.id} {...invoice} />;
               })}

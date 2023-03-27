@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    overflow-x: hidden;
+    overflow: hidden;
     min-height: 100vh;
     @apply bg-neutral-600 font-medium;
   }
