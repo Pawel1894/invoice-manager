@@ -20,6 +20,7 @@ const config = {
         600: "rgb(248, 248, 251)",
         700: "rgb(20, 22, 37)",
         800: "rgb(235, 231, 231)",
+        900: "rgba(126, 136, 195, 1)",
       },
       accent: {
         100: "rgb(236, 87, 87)",
@@ -37,7 +38,11 @@ const config = {
     },
     extend: {
       boxShadow: {
-        light: "0px 10px 10px -10px rgba(72, 84, 159, 0.100397);",
+        light: "0px 10px 10px -10px rgba(72, 84, 159, 0.100397)",
+        upper: "0px 3px 24px 10px rgba(91, 99, 108, 0.32);",
+      },
+      transitionProperty: {
+        width: "width",
       },
     },
   },
