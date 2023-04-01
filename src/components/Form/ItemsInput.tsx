@@ -73,8 +73,8 @@ export default function ItemsInput(props: InputProps) {
                     >
                       <path
                         d="M11.583 3.556v10.666c0 .982-.795 1.778-1.777 1.778H2.694a1.777 1.777 0 01-1.777-1.778V3.556h10.666zM8.473 0l.888.889h3.111v1.778H.028V.889h3.11L4.029 0h4.444z"
-                        className="fill-[#888EB0] hover:fill-primary-200 dark:fill-neutral-800 dark:hover:fill-primary-200"
-                        fillRule="nonzero"
+                        fill="#888EB0"
+                        fill-rule="nonzero"
                       />
                     </svg>
                   </button>
@@ -83,7 +83,7 @@ export default function ItemsInput(props: InputProps) {
             ))}
 
             <button
-              className="mt-12 w-full rounded-3xl bg-neutral-600 py-3 text-center font-bold text-neutral-900 dark:bg-neutral-200 dark:text-neutral-600"
+              className="mt-12 w-full rounded-3xl bg-neutral-600 py-3 text-center font-bold text-neutral-900"
               type="button"
               onClick={() =>
                 arrayHelpers.push({

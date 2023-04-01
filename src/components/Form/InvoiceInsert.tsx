@@ -78,12 +78,13 @@ export default function InvoiceInsert() {
   return (
     <>
       <div className="h-[calc(100vh-228px)] overflow-x-hidden overflow-y-scroll pb-24 lg:h-[calc(100vh-140px)]">
-        <h1 className=" ml-6 mb-5 block text-2xl font-bold text-neutral-500 dark:text-white lg:ml-0 lg:mb-11 lg:text-3xl">
+        <h1 className=" ml-6 mb-5 block text-2xl font-bold text-neutral-500 lg:ml-0 lg:mb-11 lg:text-3xl">
           New Invoice
         </h1>
         <Formik
           innerRef={formRef}
           validationSchema={valSchema}
+          validateOnMount={true}
           initialValues={{
             city: "",
             clientCity: "",
@@ -224,10 +225,8 @@ export default function InvoiceInsert() {
           </Form>
         </Formik>
       </div>
-      <div className="flex items-center justify-center gap-x-2 bg-white py-[1.375rem] shadow-upper dark:bg-transparent dark:shadow-none lg:justify-end lg:bg-transparent lg:px-6 lg:shadow-none">
-        <Button styleMode="default" className="lg:mr-auto">
-          Discard
-        </Button>
+      <div className="flex items-center justify-center gap-x-2 bg-white py-[1.375rem] shadow-upper dark:bg-neutral-100 dark:shadow-none lg:justify-end lg:bg-transparent lg:px-6 lg:shadow-none">
+        <Button styleMode="default">Discard</Button>
         <Button styleMode="accent" onClick={() => handleSubmit("DRAFT")}>
           Save as Draft
         </Button>
