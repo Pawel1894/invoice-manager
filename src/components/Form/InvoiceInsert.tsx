@@ -24,6 +24,8 @@ export default function InvoiceInsert() {
                 total: 0,
               },
             ],
+            invoiceDate: new Date(),
+            paymentTerms: 1,
           }}
           onSubmit={(value) => {
             console.log(value);
@@ -38,7 +40,7 @@ export default function InvoiceInsert() {
                 type="text"
                 id="fromStreetAddress"
               />
-              <div className="mt-6 grid grid-cols-2 gap-6">
+              <div className="mt-6 grid grid-cols-2 gap-6 lg:grid-cols-3">
                 <CustomInput
                   label="City"
                   name="city"
@@ -52,7 +54,7 @@ export default function InvoiceInsert() {
                   id="fromPostCode"
                 />
                 <CustomInput
-                  styles="col-span-full"
+                  styles="col-span-full lg:col-span-1"
                   label="Country"
                   name="fromCountry"
                   type="text"
@@ -80,7 +82,7 @@ export default function InvoiceInsert() {
                 id="clientStreetAddress"
                 styles="mt-6"
               />
-              <div className="mt-6 grid grid-cols-2 gap-6">
+              <div className="mt-6 grid grid-cols-2 gap-6 lg:grid-cols-3">
                 <CustomInput
                   label="City"
                   name="clientCity"
@@ -98,14 +100,15 @@ export default function InvoiceInsert() {
                   name="clientCountry"
                   type="text"
                   id="clientCountry"
-                  styles="col-span-full"
+                  styles="col-span-full lg:col-span-1"
                 />
               </div>
-              <div className="mt-6 flex flex-col gap-6">
+              <div className="mt-12 flex flex-col gap-6 lg:flex-row">
                 <CustomDatePicker
                   label="Invoice Date"
                   name="invoiceDate"
                   id="invoiceDate"
+                  styles="w-full"
                 />
                 <FormikCustomDropdown
                   label="Payment Terms"

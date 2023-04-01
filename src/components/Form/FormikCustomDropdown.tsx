@@ -17,7 +17,7 @@ const FormikCustomDropdown = <T,>(props: Props<T>) => {
     setFieldValue(name, val);
   };
   return (
-    <div>
+    <div className="w-full">
       <label
         className="mb-2 block text-sm text-neutral-900"
         htmlFor={props.id || props.name}

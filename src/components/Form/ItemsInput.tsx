@@ -33,13 +33,13 @@ export default function ItemsInput(props: InputProps) {
           <div>
             {values.map((item, index) => (
               <div className={`${index !== 0 ? "mt-12" : "mt-6"}`} key={index}>
-                <CustomInput
-                  label="Item Name"
-                  name={`items[${index}].name`}
-                  id={`items[${index}].name`}
-                />
-
-                <div className="mt-6 grid grid-cols-[2fr_3fr_3fr_1fr] items-center gap-x-3">
+                <div className="mt-6 grid  grid-cols-[2fr_3fr_3fr_1fr] items-center gap-x-3 gap-y-6 lg:grid-cols-[6fr_2fr_3fr_3fr_1fr] lg:gap-x-4">
+                  <CustomInput
+                    label="Item Name"
+                    styles="col-span-full lg:col-span-1"
+                    name={`items[${index}].name`}
+                    id={`items[${index}].name`}
+                  />
                   <CustomInput
                     label="Qty."
                     name={`items.${index}.quantity`}

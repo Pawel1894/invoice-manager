@@ -23,8 +23,9 @@ export default function CustomInput(props: InputProps) {
         {props.label}
       </label>
       <input
+        disabled={props.styleMode === "disabled"}
         className={`w-full py-[0.625rem]  font-bold ${
-          props.styleMode
+          props.styleMode === "disabled"
             ? " text-neutral-400"
             : "rounded border border-neutral-900 px-5 text-neutral-500 hover:border-primary-200 focus:border-primary-200 active:border-primary-200"
         }  `}
