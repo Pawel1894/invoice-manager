@@ -1,12 +1,80 @@
-import { FieldArray, Form, Formik } from "formik";
-import React from "react";
+import { Form, Formik, type FormikProps } from "formik";
+import React, { useRef, useState } from "react";
 import Button from "../Button";
 import CustomInput from "./CustomInput";
 import CustomDatePicker from "./CustomDatePicker";
 import FormikCustomDropdown from "./FormikCustomDropdown";
 import ItemsInput from "./ItemsInput";
+import * as Yup from "yup";
+
+type FormValues = {
+  streetAddress: string;
+  city: string;
+  postCode: string;
+  country: string;
+  clientName: string;
+  clientEmail: string;
+  clientStreetAddress: string;
+  clientCity: string;
+  clientPostCode: string;
+  clientCountry: string;
+  invoiceDate: Date;
+  paymentTerms: number;
+  projectDescription: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+    total: number;
+  }>;
+};
+
+const valSchema = Yup.object({
+  streetAddress: Yup.string()
+    .min(1, "Too short!")
+    .max(40, "Too long!")
+    .required(),
+  city: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
+  postCode: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
+  country: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
+  clientName: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
+  clientStreetAddress: Yup.string()
+    .min(1, "Too short!")
+    .max(40, "Too long!")
+    .required(),
+  clientCity: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
+  clientPostCode: Yup.string()
+    .min(1, "Too short!")
+    .max(40, "Too long!")
+    .required(),
+  clientCountry: Yup.string()
+    .min(1, "Too short!")
+    .max(40, "Too long!")
+    .required(),
+  invoiceDate: Yup.date().required(),
+  clientEmail: Yup.string().email(),
+  projectDescription: Yup.string(),
+  paymentTerms: Yup.number().min(1).required(),
+  items: Yup.array(
+    Yup.object({
+      name: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
+      quantity: Yup.number().min(1).required(),
+      price: Yup.number().min(1).required(),
+    })
+  ),
+});
 
 export default function InvoiceInsert() {
+  const formRef = useRef<FormikProps<FormValues>>(null);
+  const [submitAction, setSubmitAction] = useState<"DRAFT" | "SEND">("DRAFT");
+  function handleSubmit(type: "DRAFT" | "SEND") {
+    if (formRef) {
+      setSubmitAction(type);
+      formRef.current?.handleSubmit();
+      console.log("test", formRef.current?.errors);
+    }
+  }
+
   return (
     <>
       <div className="h-[calc(100vh-228px)] overflow-x-hidden overflow-y-scroll pb-24 lg:h-[calc(100vh-140px)]">
@@ -14,12 +82,25 @@ export default function InvoiceInsert() {
           New Invoice
         </h1>
         <Formik
+          innerRef={formRef}
+          validationSchema={valSchema}
+          validateOnMount={true}
           initialValues={{
-            firstName: "",
+            city: "",
+            clientCity: "",
+            clientCountry: "",
+            clientEmail: "",
+            clientName: "",
+            clientPostCode: "",
+            clientStreetAddress: "",
+            country: "",
+            postCode: "",
+            projectDescription: "",
+            streetAddress: "",
             items: [
               {
                 name: "",
-                quantity: 1,
+                quantity: 0,
                 price: 0,
                 total: 0,
               },
@@ -28,7 +109,8 @@ export default function InvoiceInsert() {
             paymentTerms: 1,
           }}
           onSubmit={(value) => {
-            console.log(value);
+            console.log("value", value);
+            console.log("submitAction", submitAction);
           }}
         >
           <Form>
@@ -36,27 +118,22 @@ export default function InvoiceInsert() {
               <span className="mb-6 block text-primary-100">Bill From</span>
               <CustomInput
                 label="Street Address"
-                name="fromStreetAddress"
+                name="streetAddress"
                 type="text"
                 id="fromStreetAddress"
               />
               <div className="mt-6 grid grid-cols-2 gap-6 lg:grid-cols-3">
-                <CustomInput
-                  label="City"
-                  name="city"
-                  type="text"
-                  id="fromCity"
-                />
+                <CustomInput label="City" name="city" type="text" id="city" />
                 <CustomInput
                   label="Post Code"
-                  name="fromPostCode"
+                  name="postCode"
                   type="text"
                   id="fromPostCode"
                 />
                 <CustomInput
                   styles="col-span-full lg:col-span-1"
-                  label="Country"
-                  name="fromCountry"
+                  label="country"
+                  name="country"
                   type="text"
                   id="fromCountry"
                 />
@@ -150,8 +227,12 @@ export default function InvoiceInsert() {
       </div>
       <div className="flex items-center justify-center gap-x-2 bg-white py-[1.375rem] shadow-upper dark:bg-neutral-100 dark:shadow-none lg:justify-end lg:bg-transparent lg:px-6 lg:shadow-none">
         <Button styleMode="default">Discard</Button>
-        <Button styleMode="accent">Save as Draft</Button>
-        <Button styleMode="primary">Save & Send</Button>
+        <Button styleMode="accent" onClick={() => handleSubmit("DRAFT")}>
+          Save as Draft
+        </Button>
+        <Button styleMode="primary" onClick={() => handleSubmit("SEND")}>
+          Save & Send
+        </Button>
       </div>
     </>
   );

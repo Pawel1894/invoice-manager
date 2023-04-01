@@ -14,6 +14,7 @@ type InputProps = {
 };
 export default function CustomInput(props: InputProps) {
   const [field, meta] = useField(props);
+
   return (
     <div className={props.styles}>
       <label

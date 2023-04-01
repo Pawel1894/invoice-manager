@@ -1,4 +1,4 @@
-import { Field, FieldArray, useField, useFormikContext } from "formik";
+import { FieldArray, useField } from "formik";
 import React from "react";
 import CustomInput from "./CustomInput";
 
@@ -19,7 +19,6 @@ type items = Array<{
 }>;
 
 export default function ItemsInput(props: InputProps) {
-  const { setFieldValue } = useFormikContext();
   const [field, meta] = useField(props);
   const values = field.value as items;
   return (
@@ -86,7 +85,14 @@ export default function ItemsInput(props: InputProps) {
             <button
               className="mt-12 w-full rounded-3xl bg-neutral-600 py-3 text-center font-bold text-neutral-900"
               type="button"
-              onClick={() => arrayHelpers.push({ name: "", age: "" })}
+              onClick={() =>
+                arrayHelpers.push({
+                  name: "",
+                  quantity: 0,
+                  price: 0,
+                  total: 0,
+                })
+              }
             >
               + Add New Item
             </button>
