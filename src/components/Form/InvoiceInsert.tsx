@@ -1,9 +1,10 @@
-import { Form, Formik } from "formik";
+import { FieldArray, Form, Formik } from "formik";
 import React from "react";
 import Button from "../Button";
 import CustomInput from "./CustomInput";
 import CustomDatePicker from "./CustomDatePicker";
 import FormikCustomDropdown from "./FormikCustomDropdown";
+import ItemsInput from "./ItemsInput";
 
 export default function InvoiceInsert() {
   return (
@@ -13,7 +14,17 @@ export default function InvoiceInsert() {
           New Invoice
         </h1>
         <Formik
-          initialValues={{ firstName: "" }}
+          initialValues={{
+            firstName: "",
+            items: [
+              {
+                name: "",
+                quantity: 1,
+                price: 0,
+                total: 0,
+              },
+            ],
+          }}
           onSubmit={(value) => {
             console.log(value);
           }}
@@ -127,6 +138,9 @@ export default function InvoiceInsert() {
                 placeholder="e.g. Graphic Design Service"
                 styles="mt-6"
               />
+              <div className="mt-16">
+                <ItemsInput id="items" name="items" label="Item List" />
+              </div>
             </div>
           </Form>
         </Formik>

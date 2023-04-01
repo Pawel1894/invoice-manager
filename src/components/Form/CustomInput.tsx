@@ -1,7 +1,7 @@
 import { useField } from "formik";
 
 type InputProps = {
-  label: string;
+  label?: string;
   name: string;
   validate?: (value: any) => undefined | string | Promise<any>;
   type?: string;
@@ -10,6 +10,7 @@ type InputProps = {
   placeholder?: string;
   id: string;
   styles?: string;
+  styleMode?: "disabled";
 };
 export default function CustomInput(props: InputProps) {
   const [field, meta] = useField(props);
@@ -22,7 +23,11 @@ export default function CustomInput(props: InputProps) {
         {props.label}
       </label>
       <input
-        className="w-full rounded border border-neutral-900 py-[0.625rem] px-5 font-bold text-neutral-500 hover:border-primary-200 focus:border-primary-200 active:border-primary-200"
+        className={`w-full py-[0.625rem]  font-bold ${
+          props.styleMode
+            ? " text-neutral-400"
+            : "rounded border border-neutral-900 px-5 text-neutral-500 hover:border-primary-200 focus:border-primary-200 active:border-primary-200"
+        }  `}
         {...field}
         {...props}
       />
