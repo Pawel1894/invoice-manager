@@ -1,4 +1,4 @@
-import { FieldArray, useField } from "formik";
+import { ErrorMessage, FieldArray, useField } from "formik";
 import React from "react";
 import CustomInput from "./CustomInput";
 
@@ -34,23 +34,30 @@ export default function ItemsInput(props: InputProps) {
               <div className={`${index !== 0 ? "mt-12" : "mt-6"}`} key={index}>
                 <div className="mt-6 grid  grid-cols-[2fr_3fr_3fr_1fr] items-center gap-x-3 gap-y-6 lg:grid-cols-[6fr_2fr_3fr_3fr_1fr] lg:gap-x-4">
                   <CustomInput
+                    type="text"
                     label="Item Name"
                     styles="col-span-full lg:col-span-1"
                     name={`items[${index}].name`}
                     id={`items[${index}].name`}
+                    errorBottom={true}
                   />
                   <CustomInput
+                    type="number"
                     label="Qty."
                     name={`items.${index}.quantity`}
                     id={`items.${index}.quantity`}
+                    errorBottom={true}
                   />
                   <CustomInput
+                    type="number"
                     label="Price"
                     name={`items.${index}.price`}
                     id={`items.${index}.price`}
+                    errorBottom={true}
                   />
                   <CustomInput
-                    styleMode="disabled"
+                    type="number"
+                    stylemode="disabled"
                     label="Total"
                     name={`items.${index}.total`}
                     id={`items.${index}.total`}

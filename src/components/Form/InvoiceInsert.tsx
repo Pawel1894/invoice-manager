@@ -1,4 +1,4 @@
-import { Form, Formik, type FormikProps } from "formik";
+import { ErrorMessage, Form, Formik, type FormikProps } from "formik";
 import React, { useRef, useState } from "react";
 import Button from "../Button";
 import CustomInput from "./CustomInput";
@@ -6,6 +6,7 @@ import CustomDatePicker from "./CustomDatePicker";
 import FormikCustomDropdown from "./FormikCustomDropdown";
 import ItemsInput from "./ItemsInput";
 import * as Yup from "yup";
+import Link from "next/link";
 
 type FormValues = {
   streetAddress: string;
@@ -31,35 +32,55 @@ type FormValues = {
 
 const valSchema = Yup.object({
   streetAddress: Yup.string()
-    .min(1, "Too short!")
-    .max(40, "Too long!")
-    .required(),
-  city: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
-  postCode: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
-  country: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
-  clientName: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
+  city: Yup.string()
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
+  postCode: Yup.string()
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
+  country: Yup.string()
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
+  clientName: Yup.string()
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
   clientStreetAddress: Yup.string()
-    .min(1, "Too short!")
-    .max(40, "Too long!")
-    .required(),
-  clientCity: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
+  clientCity: Yup.string()
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
   clientPostCode: Yup.string()
-    .min(1, "Too short!")
-    .max(40, "Too long!")
-    .required(),
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
   clientCountry: Yup.string()
-    .min(1, "Too short!")
-    .max(40, "Too long!")
-    .required(),
-  invoiceDate: Yup.date().required(),
-  clientEmail: Yup.string().email(),
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
+  invoiceDate: Yup.date().required("can't be empty"),
+  clientEmail: Yup.string().email("must be a valid email"),
   projectDescription: Yup.string(),
-  paymentTerms: Yup.number().min(1).required(),
+  paymentTerms: Yup.number().min(1).required("can't be empty"),
   items: Yup.array(
     Yup.object({
-      name: Yup.string().min(1, "Too short!").max(40, "Too long!").required(),
-      quantity: Yup.number().min(1).required(),
-      price: Yup.number().min(1).required(),
+      name: Yup.string()
+        .min(1, "too short!")
+        .max(40, "too long!")
+        .required("can't be empty"),
+      quantity: Yup.number()
+        .positive("can't be negative")
+        .required("must be a number"),
+      price: Yup.number().required("must be a number"),
     })
   ),
 });
@@ -99,7 +120,7 @@ export default function InvoiceInsert() {
             items: [
               {
                 name: "",
-                quantity: 0,
+                quantity: 1,
                 price: 0,
                 total: 0,
               },
@@ -131,7 +152,7 @@ export default function InvoiceInsert() {
                 />
                 <CustomInput
                   styles="col-span-full lg:col-span-1"
-                  label="country"
+                  label="Country"
                   name="country"
                   type="text"
                   id="fromCountry"
@@ -221,17 +242,175 @@ export default function InvoiceInsert() {
                 <ItemsInput id="items" name="items" label="Item List" />
               </div>
             </div>
+            <div className="mt-6 flex flex-col gap-2">
+              <ErrorMessage
+                name="streetAddress"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#fromStreetAddress"
+                    >
+                      Street Address {e}
+                    </a>
+                  );
+                }}
+              />
+              <ErrorMessage
+                name="city"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#city"
+                    >
+                      City {e}
+                    </a>
+                  );
+                }}
+              />
+              <ErrorMessage
+                name="postCode"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#postCode"
+                    >
+                      Post Code {e}
+                    </a>
+                  );
+                }}
+              />
+              <ErrorMessage
+                name="country"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#country"
+                    >
+                      Country {e}
+                    </a>
+                  );
+                }}
+              />
+              <ErrorMessage
+                name="clientName"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#clientName"
+                    >
+                      Client Name {e}
+                    </a>
+                  );
+                }}
+              />
+              <ErrorMessage
+                name="clientEmail"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#clientEmail"
+                    >
+                      Client Email {e}
+                    </a>
+                  );
+                }}
+              />
+              <ErrorMessage
+                name="clientStreetAddress"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#clientStreetAddress"
+                    >
+                      Client Street Address {e}
+                    </a>
+                  );
+                }}
+              />
+              <ErrorMessage
+                name="clientCity"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#clientCity"
+                    >
+                      Client City {e}
+                    </a>
+                  );
+                }}
+              />
+              <ErrorMessage
+                name="clientPostCode"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#clientPostCode"
+                    >
+                      Client Post Code {e}
+                    </a>
+                  );
+                }}
+              />
+              <ErrorMessage
+                name="clientCountry"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#clientCountry"
+                    >
+                      Client Country {e}
+                    </a>
+                  );
+                }}
+              />
+              <ErrorMessage
+                name="invoiceDate"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#invoiceDate"
+                    >
+                      Invoice Date {e}
+                    </a>
+                  );
+                }}
+              />
+              <ErrorMessage
+                name="paymentTerms"
+                render={(e) => {
+                  return (
+                    <a
+                      className="text-sm text-accent-100 underline"
+                      href="#paymentTerms"
+                    >
+                      Payment Terms {e}
+                    </a>
+                  );
+                }}
+              />
+            </div>
           </Form>
         </Formik>
       </div>
       <div className="flex items-center justify-center gap-x-2 bg-white py-[1.375rem] shadow-upper dark:bg-transparent dark:shadow-none lg:justify-end lg:bg-transparent lg:px-6 lg:shadow-none">
-        <Button styleMode="default" className="lg:mr-auto">
+        <Button stylemode="default" className="lg:mr-auto">
           Discard
         </Button>
-        <Button styleMode="accent" onClick={() => handleSubmit("DRAFT")}>
+        <Button stylemode="accent" onClick={() => handleSubmit("DRAFT")}>
           Save as Draft
         </Button>
-        <Button styleMode="primary" onClick={() => handleSubmit("SEND")}>
+        <Button stylemode="primary" onClick={() => handleSubmit("SEND")}>
           Save & Send
         </Button>
       </div>
