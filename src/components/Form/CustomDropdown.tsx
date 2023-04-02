@@ -31,12 +31,12 @@ const CustomDropdown = <T,>(props: CustomDropdownProps<T>) => {
         </Listbox.Button>
         <Listbox.Options
           className={
-            "absolute top-full left-0 w-full rounded-lg bg-white shadow-md dark:bg-neutral-200 dark:text-neutral-600"
+            "absolute top-full left-0 z-10 w-full rounded-lg bg-white shadow-md dark:bg-neutral-200 dark:text-neutral-600"
           }
         >
           {options.map((option, i) => (
             <Listbox.Option
-              className={`w-full  ${
+              className={` w-full  ${
                 i !== options.length - 1 ? "border-b border-b-neutral-400" : ""
               }`}
               key={i}

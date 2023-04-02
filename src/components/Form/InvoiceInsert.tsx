@@ -6,7 +6,7 @@ import CustomDatePicker from "./CustomDatePicker";
 import FormikCustomDropdown from "./FormikCustomDropdown";
 import ItemsInput from "./ItemsInput";
 import * as Yup from "yup";
-import Link from "next/link";
+import { api } from "~/utils/api";
 
 type FormValues = {
   streetAddress: string;
@@ -22,6 +22,8 @@ type FormValues = {
   invoiceDate: Date;
   paymentTerms: number;
   projectDescription: string;
+  invoiceNum: string;
+  bankAccount: string;
   items: Array<{
     name: string;
     quantity: number;
@@ -63,6 +65,7 @@ const valSchema = Yup.object({
     .min(1, "too short!")
     .max(40, "too long!")
     .required("can't be empty"),
+  invoiceNum: Yup.string().required("can't be empty"),
   clientCountry: Yup.string()
     .min(1, "too short!")
     .max(40, "too long!")
@@ -81,18 +84,23 @@ const valSchema = Yup.object({
         .positive("can't be negative")
         .required("must be a number"),
       price: Yup.number().required("must be a number"),
+      total: Yup.number(),
     })
   ),
 });
 
 export default function InvoiceInsert() {
   const formRef = useRef<FormikProps<FormValues>>(null);
-  const [submitAction, setSubmitAction] = useState<"DRAFT" | "SEND">("DRAFT");
-  function handleSubmit(type: "DRAFT" | "SEND") {
+  const [submitAction, setSubmitAction] = useState<"DRAFT" | "PENDING">(
+    "DRAFT"
+  );
+  const { data: response, mutate: createInvoice } =
+    api.invoice.create.useMutation();
+
+  function handleSubmit(type: "DRAFT" | "PENDING") {
     if (formRef) {
       setSubmitAction(type);
       formRef.current?.handleSubmit();
-      console.log("test", formRef.current?.errors);
     }
   }
 
@@ -117,6 +125,8 @@ export default function InvoiceInsert() {
             postCode: "",
             projectDescription: "",
             streetAddress: "",
+            invoiceNum: "",
+            bankAccount: "",
             items: [
               {
                 name: "",
@@ -131,6 +141,13 @@ export default function InvoiceInsert() {
           onSubmit={(value) => {
             console.log("value", value);
             console.log("submitAction", submitAction);
+
+            const requestData = {
+              ...value,
+              status: submitAction,
+            };
+
+            createInvoice(requestData);
           }}
         >
           <Form>
@@ -231,6 +248,18 @@ export default function InvoiceInsert() {
                   id="paymentTerms"
                 />
               </div>
+              <CustomInput
+                label="Invoice Number"
+                name="invoiceNum"
+                id="invoiceNum"
+                styles="mt-6"
+              />
+              <CustomInput
+                label="Bank Account"
+                name="bankAccount"
+                id="bankAccount"
+                styles="mt-6"
+              />
               <CustomInput
                 label="Project Description"
                 name="projectDescription"
@@ -410,7 +439,7 @@ export default function InvoiceInsert() {
         <Button stylemode="accent" onClick={() => handleSubmit("DRAFT")}>
           Save as Draft
         </Button>
-        <Button stylemode="primary" onClick={() => handleSubmit("SEND")}>
+        <Button stylemode="primary" onClick={() => handleSubmit("PENDING")}>
           Save & Send
         </Button>
       </div>

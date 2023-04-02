@@ -19,7 +19,7 @@ type items = Array<{
 }>;
 
 export default function ItemsInput(props: InputProps) {
-  const [field, meta] = useField(props);
+  const [field] = useField(props);
   const values = field.value as items;
   return (
     <div>

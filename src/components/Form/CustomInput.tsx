@@ -1,5 +1,4 @@
-import { useField, useFormikContext } from "formik";
-import { KeyboardEvent } from "react";
+import { useField } from "formik";
 
 type InputProps = {
   label?: string;
