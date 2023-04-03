@@ -49,7 +49,7 @@ export default function Invoice() {
                     invoicesData.length === 1 ? (
                       <span>1 Invoice</span>
                     ) : (
-                      <span>invoicesData.length Invoices</span>
+                      <span>{invoicesData.length} Invoices</span>
                     )
                   ) : (
                     "No invoices"
@@ -81,7 +81,7 @@ export default function Invoice() {
                 <NoInvoices />
               </div>
             ) : (
-              <div className="mx-auto mt-8 h-[calc(100vh-14rem)] max-w-screen-lg overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-11.5rem)]">
+              <div className="mx-auto mt-8 flex h-[calc(100vh-14rem)] max-w-screen-lg flex-col gap-4 overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-11.5rem)]">
                 {invoicesData.map((invoice) => {
                   return <InvoiceDisplay key={invoice.id} {...invoice} />;
                 })}

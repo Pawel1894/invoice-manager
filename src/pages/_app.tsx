@@ -6,14 +6,19 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import "~/styles/react-datepicker.css";
+import "~/styles/react-toastify.css";
+import { ToastContainer } from "react-toastify";
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
+    <>
+      <SessionProvider session={session}>
+        <Component {...pageProps} />
+      </SessionProvider>
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 };
 

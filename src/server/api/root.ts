@@ -1,3 +1,4 @@
+import { inferRouterInputs } from "@trpc/server";
 import { invoiceRouter } from "./routers/invoice";
 import { userRouter } from "./routers/user";
 import { createTRPCRouter } from "~/server/api/trpc";

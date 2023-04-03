@@ -29,6 +29,7 @@
     "react-datepicker": "^4.11.0",
     "react-dom": "18.2.0",
     "react-select": "^5.7.2",
+    "react-toastify": "^9.1.2",
     "superjson": "1.9.1",
     "yup": "^1.0.2",
     "zod": "^3.20.6"

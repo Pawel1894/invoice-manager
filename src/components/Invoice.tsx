@@ -56,7 +56,7 @@ export default function Invoice({
       </span>
       <div className="row-span-2 flex items-center justify-self-end md:row-auto md:justify-self-end">
         <div
-          className={`rounded-md ${statusStyle[status].bg}  py-2 px-[1.6875rem] `}
+          className={`rounded-md ${statusStyle[status].bg} flex w-[6.5rem] items-center justify-center px-[1rem] py-2`}
         >
           <span
             className={`mr-2 inline-block h-2 w-2 rounded-full  ${statusStyle[status].accent}`}

@@ -1,8 +1,10 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure } from "~/server/api/trpc";
 import { createTRPCRouter } from "~/server/api/trpc";
+import { assingInvoiceItems, createInvoice } from "../helpers/InvoiceHelper";
 
-const createSchema = z.object({
+const CreateInvoiceSchema = z.object({
   status: z.enum(["DRAFT", "PENDING", "PAID"]),
   streetAddress: z
     .string()
@@ -59,17 +61,15 @@ const createSchema = z.object({
   paymentTerms: z.number().min(1),
   items: z.array(
     z.object({
-      name: z
-        .string()
-        .min(1, "too short!")
-        .max(40, "too long!")
-        .nonempty("can't be empty"),
+      name: z.string().max(40, "too long!").nonempty("can't be empty"),
       quantity: z.number().nonnegative("can't be negative"),
       price: z.number().nonnegative("can't be negative"),
       total: z.number(),
     })
   ),
 });
+
+export type CreateInvoiceInput = z.infer<typeof CreateInvoiceSchema>;
 
 export const invoiceRouter = createTRPCRouter({
   getInvoices: protectedProcedure.query(async ({ ctx }) => {
@@ -83,51 +83,22 @@ export const invoiceRouter = createTRPCRouter({
     });
   }),
   create: protectedProcedure
-    .input(createSchema)
+    .input(CreateInvoiceSchema)
     .mutation(async ({ ctx, input }) => {
-      const dueDate = new Date(input.invoiceDate);
-      dueDate.setDate(dueDate.getDate() + input.paymentTerms);
-
-      let totalAmount = 0;
-      input.items.forEach(
-        (item) => (totalAmount += item.price * item.quantity)
+      const invoice = await createInvoice(
+        input,
+        ctx.session.user.id,
+        ctx.prisma
       );
 
-      const invoice = await ctx.prisma.invoice.create({
-        data: {
-          userId: ctx.session.user.id,
-          number: input.invoiceNum,
-          invoiceDate: input.invoiceDate,
-          dueDate: dueDate,
-          streetAddress: input.streetAddress,
-          city: input.city,
-          postCode: input.postCode,
-          country: input.country,
-          bankAccount: input.bankAccount,
-          clientName: input.clientName,
-          clientEmail: input.clientEmail,
-          clientStreetAddress: input.clientStreetAddress,
-          clientCity: input.clientCity,
-          clientPostCode: input.clientPostCode,
-          clientCountry: input.clientCountry,
-          decription: input.projectDescription,
-          totalAmount: totalAmount,
-          status: input.status,
-        },
-      });
+      if (!invoice) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Saving invoice failed please try again.",
+        });
+      }
 
-      // add items for this invoice
-      const items = input.items.map((item) => {
-        return {
-          ...item,
-          total: item.price * item.quantity,
-          invoiceId: invoice.id,
-        };
-      });
-
-      await ctx.prisma.invoiceItem.createMany({
-        data: items,
-      });
+      await assingInvoiceItems(input.items, invoice.id, ctx.prisma);
 
       return invoice;
     }),

@@ -13,7 +13,7 @@ type InputProps = {
   stylemode?: "disabled";
   errorBottom?: boolean;
 };
-export default function CustomInput(props: InputProps) {
+export default function CustomInput({ errorBottom, ...props }: InputProps) {
   const [field, meta] = useField(props);
   return (
     <div className={`${props.styles ? props.styles : ""} relative`}>
@@ -42,7 +42,7 @@ export default function CustomInput(props: InputProps) {
       {meta.touched && meta.error ? (
         <div
           className={`absolute ${
-            props.errorBottom ? "top-full" : "top-0"
+            errorBottom ? "top-full" : "top-0"
           }  right-0 text-xs leading-5 text-accent-100`}
         >
           {meta.error}
