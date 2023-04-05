@@ -32,6 +32,8 @@ export async function createInvoice(
       decription: input.projectDescription,
       totalAmount: totalAmount,
       status: input.status,
+      name: input.name,
+      idNo: input.idNo,
     },
   });
   return invoice;

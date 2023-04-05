@@ -11,6 +11,8 @@ import { toast } from "react-toastify";
 import ClientAutocomplete from "./ClientAutocomplete";
 
 type FormValues = {
+  name: string;
+  idNo: string;
   streetAddress: string;
   city: string;
   postCode: string;
@@ -35,18 +37,11 @@ type FormValues = {
 };
 
 const valSchema = Yup.object({
-  streetAddress: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
-  city: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
-  postCode: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
+  name: Yup.string().max(80, "too long!").required("can't be empty"),
+  idNo: Yup.string().max(40, "too long!"),
+  streetAddress: Yup.string().min(1, "too short!").max(40, "too long!"),
+  city: Yup.string().min(1, "too short!").max(40, "too long!"),
+  postCode: Yup.string().min(1, "too short!").max(40, "too long!"),
   country: Yup.string()
     .min(1, "too short!")
     .max(40, "too long!")
@@ -102,6 +97,8 @@ export default function InvoiceInsert() {
           formRef.current.initialValues.city = data?.city ?? "";
           formRef.current.initialValues.country = data?.country ?? "";
           formRef.current.initialValues.postCode = data?.postCode ?? "";
+          formRef.current.initialValues.name = data?.name ?? "";
+          formRef.current.initialValues.idNo = data?.idNo ?? "";
         }
       },
     }
@@ -175,6 +172,8 @@ export default function InvoiceInsert() {
           validationSchema={valSchema}
           initialValues={{
             city: "",
+            name: "",
+            idNo: "",
             clientCity: "",
             clientCountry: "",
             clientEmail: "",
@@ -214,11 +213,20 @@ export default function InvoiceInsert() {
               <>
                 <div className="px-6">
                   <span className="mb-6 block text-primary-100">Bill From</span>
+                  <CustomInput label="Name" name="name" id="name" />
+                  <CustomInput
+                    label="Identification No."
+                    name="idNo"
+                    id="idNo"
+                    styles="mt-6"
+                    placeholder="eg. EIN 0123456789"
+                  />
                   <CustomInput
                     label="Street Address"
                     name="streetAddress"
                     type="text"
                     id="fromStreetAddress"
+                    styles="mt-6"
                   />
                   <div className="mt-6 grid grid-cols-2 gap-6 lg:grid-cols-3">
                     <CustomInput
@@ -346,6 +354,32 @@ export default function InvoiceInsert() {
                   </div>
                 </div>
                 <div className="mt-6 flex flex-col gap-2">
+                  <ErrorMessage
+                    name="name"
+                    render={(e) => {
+                      return (
+                        <a
+                          className="text-sm text-accent-100 underline"
+                          href="#name"
+                        >
+                          name {e}
+                        </a>
+                      );
+                    }}
+                  />
+                  <ErrorMessage
+                    name="idNo"
+                    render={(e) => {
+                      return (
+                        <a
+                          className="text-sm text-accent-100 underline"
+                          href="#idNo"
+                        >
+                          Identification No. {e}
+                        </a>
+                      );
+                    }}
+                  />
                   <ErrorMessage
                     name="streetAddress"
                     render={(e) => {

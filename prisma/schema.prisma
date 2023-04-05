@@ -70,6 +70,8 @@ model VerificationToken {
 model Invoice {
     id                  String        @id @default(cuid())
     number              String
+    name                String
+    idNo                String
     invoiceDate         DateTime
     dueDate             DateTime
     streetAddress       String

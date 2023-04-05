@@ -5,29 +5,13 @@ import { createTRPCRouter } from "~/server/api/trpc";
 import { assingInvoiceItems, createInvoice } from "../helpers/InvoiceHelper";
 
 const CreateInvoiceSchema = z.object({
+  name: z.string().max(80, "too long!").nonempty("can't be empty"),
+  idNo: z.string().max(40, "too long!"),
   status: z.enum(["DRAFT", "PENDING", "PAID"]),
-  streetAddress: z
-    .string()
-    .min(1)
-    .max(40)
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .nonempty("can't be empty"),
-  city: z
-    .string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .nonempty("can't be empty"),
-  postCode: z
-    .string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .nonempty("can't be empty"),
-  country: z
-    .string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .nonempty("can't be empty"),
+  streetAddress: z.string(),
+  city: z.string(),
+  postCode: z.string(),
+  country: z.string(),
   clientName: z.string().max(40, "too long!").nonempty("can't be empty"),
   clientStreetAddress: z
     .string()
@@ -109,6 +93,8 @@ export const invoiceRouter = createTRPCRouter({
         postCode: true,
         country: true,
         bankAccount: true,
+        name: true,
+        idNo: true,
       },
       orderBy: {
         createdAt: "desc",
