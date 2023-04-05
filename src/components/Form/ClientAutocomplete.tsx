@@ -1,5 +1,4 @@
-import React, { FormEvent, KeyboardEvent, useState } from "react";
-import CustomDropdown, { type CustomDropdownOption } from "./CustomDropdown";
+import React, { useState } from "react";
 import { useField, useFormikContext } from "formik";
 import { api } from "~/utils/api";
 import { Combobox } from "@headlessui/react";
@@ -80,7 +79,7 @@ export default function ClientAutocomplete(props: Props) {
         />
         <Combobox.Options
           className={
-            "relative z-10 w-full rounded-lg bg-white shadow-md dark:bg-neutral-200 dark:text-neutral-600"
+            "relative z-10 w-full rounded-lg bg-white px-2 shadow-md dark:bg-neutral-200 dark:text-neutral-600"
           }
         >
           {options &&
@@ -89,7 +88,7 @@ export default function ClientAutocomplete(props: Props) {
               <Combobox.Option
                 key={option.clientName}
                 value={option}
-                className=" ui-active:bg-primary-100  ui-active:text-white"
+                className=" cursor-pointer py-3 ui-active:text-primary-100 "
               >
                 {option.clientName}
               </Combobox.Option>

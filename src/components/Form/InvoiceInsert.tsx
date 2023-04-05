@@ -90,6 +90,22 @@ const valSchema = Yup.object({
 
 export default function InvoiceInsert() {
   const formRef = useRef<FormikProps<FormValues>>(null);
+  const { refetch: refetchInit } = api.invoice.lastUserData.useQuery(
+    undefined,
+    {
+      onSettled: (data) => {
+        if (formRef.current) {
+          formRef.current.resetForm();
+          formRef.current.initialValues.streetAddress =
+            data?.streetAddress ?? "";
+          formRef.current.initialValues.bankAccount = data?.bankAccount ?? "";
+          formRef.current.initialValues.city = data?.city ?? "";
+          formRef.current.initialValues.country = data?.country ?? "";
+          formRef.current.initialValues.postCode = data?.postCode ?? "";
+        }
+      },
+    }
+  );
 
   const [serverErrors, setServerErrors] = useState<Array<{
     name: string;
@@ -135,6 +151,9 @@ export default function InvoiceInsert() {
         toast.error(error.message);
       }
     },
+    onSettled: async () => {
+      await refetchInit();
+    },
   });
 
   function handleSubmit(type: "DRAFT" | "PENDING") {
@@ -151,7 +170,6 @@ export default function InvoiceInsert() {
         <h1 className=" ml-6 mb-5 block text-2xl font-bold text-neutral-500 dark:text-white lg:ml-0 lg:mb-11 lg:text-3xl">
           New Invoice
         </h1>
-
         <Formik
           innerRef={formRef}
           validationSchema={valSchema}
@@ -223,6 +241,12 @@ export default function InvoiceInsert() {
                       id="fromCountry"
                     />
                   </div>
+                  <CustomInput
+                    label="Bank Account"
+                    name="bankAccount"
+                    id="bankAccount"
+                    styles="mt-6"
+                  />
                   <span className="mb-6 mt-12 block text-primary-100">
                     Bill To
                   </span>
@@ -309,12 +333,7 @@ export default function InvoiceInsert() {
                     id="invoiceNum"
                     styles="mt-6"
                   />
-                  <CustomInput
-                    label="Bank Account"
-                    name="bankAccount"
-                    id="bankAccount"
-                    styles="mt-6"
-                  />
+
                   <CustomInput
                     label="Project Description"
                     name="projectDescription"

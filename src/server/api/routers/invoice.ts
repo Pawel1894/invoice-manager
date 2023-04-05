@@ -3,7 +3,6 @@ import { z } from "zod";
 import { protectedProcedure } from "~/server/api/trpc";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { assingInvoiceItems, createInvoice } from "../helpers/InvoiceHelper";
-import { orderBy } from "cypress/types/lodash";
 
 const CreateInvoiceSchema = z.object({
   status: z.enum(["DRAFT", "PENDING", "PAID"]),
@@ -99,6 +98,24 @@ export const invoiceRouter = createTRPCRouter({
 
       return invoice;
     }),
+  lastUserData: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.invoice.findFirst({
+      where: {
+        userId: ctx.session.user.id,
+      },
+      select: {
+        streetAddress: true,
+        city: true,
+        postCode: true,
+        country: true,
+        bankAccount: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 1,
+    });
+  }),
   clientAutocomplete: protectedProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
