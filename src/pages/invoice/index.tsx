@@ -35,7 +35,7 @@ export default function Invoice() {
       <Layout isDarkMode={theme?.darkMode ?? false}>
         <>
           <Popup isOpen={isInsertOpen} setIsInsertOpen={setIsInsertOpen}>
-            <CreateInvoiceForm />
+            <CreateInvoiceForm setIsInsertOpen={setIsInsertOpen} />
           </Popup>
 
           <div className="mx-6 pt-8 md:mx-12 lg:pt-20">

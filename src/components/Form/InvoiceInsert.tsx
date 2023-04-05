@@ -1,5 +1,5 @@
 import { ErrorMessage, Form, Formik, type FormikProps } from "formik";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../Button";
 import CustomInput from "./CustomInput";
 import CustomDatePicker from "./CustomDatePicker";
@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { api } from "~/utils/api";
 import { toast } from "react-toastify";
 import ClientAutocomplete from "./ClientAutocomplete";
+import LoadIndicator from "../LoadIndicator";
 
 type FormValues = {
   name: string;
@@ -83,8 +84,13 @@ const valSchema = Yup.object({
   ),
 });
 
-export default function InvoiceInsert() {
+export default function InvoiceInsert({
+  setIsInsertOpen,
+}: {
+  setIsInsertOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const formRef = useRef<FormikProps<FormValues>>(null);
+  const errorSummaryRef = useRef<HTMLDivElement>(null);
   const { refetch: refetchInit } = api.invoice.lastUserData.useQuery(
     undefined,
     {
@@ -113,7 +119,11 @@ export default function InvoiceInsert() {
   );
   const ctx = api.useContext();
 
-  const { mutate: createInvoice, isLoading } = api.invoice.create.useMutation({
+  const {
+    mutate: createInvoice,
+    isLoading,
+    isError,
+  } = api.invoice.create.useMutation({
     onSuccess: () => {
       void ctx.invoice.getInvoices.invalidate();
       formRef.current?.resetForm();
@@ -152,6 +162,12 @@ export default function InvoiceInsert() {
       await refetchInit();
     },
   });
+
+  useEffect(() => {
+    if (isError && serverErrors) {
+      errorSummaryRef.current?.scrollIntoView();
+    }
+  }, [isError, serverErrors]);
 
   function handleSubmit(type: "DRAFT" | "PENDING") {
     setServerErrors(null);
@@ -208,7 +224,9 @@ export default function InvoiceInsert() {
         >
           <Form>
             {isLoading ? (
-              <span>LOADING</span>
+              <div className="flex justify-center">
+                <LoadIndicator />
+              </div>
             ) : (
               <>
                 <div className="px-6">
@@ -353,7 +371,7 @@ export default function InvoiceInsert() {
                     <ItemsInput id="items" name="items" label="Item List" />
                   </div>
                 </div>
-                <div className="mt-6 flex flex-col gap-2">
+                <div ref={errorSummaryRef} className="mt-6 flex flex-col gap-2">
                   <ErrorMessage
                     name="name"
                     render={(e) => {
@@ -555,7 +573,14 @@ export default function InvoiceInsert() {
       </div>
 
       <div className="flex items-center justify-center gap-x-2 bg-white py-[1.375rem] shadow-upper dark:bg-transparent dark:shadow-none lg:justify-end lg:bg-transparent lg:px-6 lg:shadow-none">
-        <Button stylemode="default" className="lg:mr-auto">
+        <Button
+          stylemode="default"
+          className="lg:mr-auto"
+          onClick={() => {
+            setIsInsertOpen(false);
+            formRef.current?.resetForm();
+          }}
+        >
           Discard
         </Button>
         <Button stylemode="accent" onClick={() => handleSubmit("DRAFT")}>
