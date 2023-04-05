@@ -8,6 +8,7 @@ import ItemsInput from "./ItemsInput";
 import * as Yup from "yup";
 import { api } from "~/utils/api";
 import { toast } from "react-toastify";
+import ClientAutocomplete from "./ClientAutocomplete";
 
 type FormValues = {
   streetAddress: string;
@@ -50,10 +51,7 @@ const valSchema = Yup.object({
     .min(1, "too short!")
     .max(40, "too long!")
     .required("can't be empty"),
-  clientName: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
+  clientName: Yup.string().max(40, "too long!").required("can't be empty"),
   clientStreetAddress: Yup.string()
     .min(1, "too short!")
     .max(40, "too long!")
@@ -228,10 +226,15 @@ export default function InvoiceInsert() {
                   <span className="mb-6 mt-12 block text-primary-100">
                     Bill To
                   </span>
-                  <CustomInput
+                  {/* <CustomInput
                     label="Client's Name"
                     name="clientName"
                     type="text"
+                    id="clientName"
+                  /> */}
+                  <ClientAutocomplete
+                    label="Client's Name"
+                    name="clientName"
                     id="clientName"
                   />
                   <CustomInput

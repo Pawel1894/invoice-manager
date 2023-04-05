@@ -1,3 +1,4 @@
+const headlessui = require("@headlessui/tailwindcss");
 /** @type {import('tailwindcss').Config} */
 const config = {
   content: ["./src/**/*.{jsx,tsx}"],
@@ -46,7 +47,7 @@ const config = {
       },
     },
   },
-  plugins: [],
+  plugins: [headlessui({ prefix: "ui" })],
 };
 
 module.exports = config;

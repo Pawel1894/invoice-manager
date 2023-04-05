@@ -3,6 +3,7 @@ import { z } from "zod";
 import { protectedProcedure } from "~/server/api/trpc";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { assingInvoiceItems, createInvoice } from "../helpers/InvoiceHelper";
+import { orderBy } from "cypress/types/lodash";
 
 const CreateInvoiceSchema = z.object({
   status: z.enum(["DRAFT", "PENDING", "PAID"]),
@@ -28,11 +29,7 @@ const CreateInvoiceSchema = z.object({
     .min(1, "too short!")
     .max(40, "too long!")
     .nonempty("can't be empty"),
-  clientName: z
-    .string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .nonempty("can't be empty"),
+  clientName: z.string().max(40, "too long!").nonempty("can't be empty"),
   clientStreetAddress: z
     .string()
     .min(1, "too short!")
@@ -101,5 +98,31 @@ export const invoiceRouter = createTRPCRouter({
       await assingInvoiceItems(input.items, invoice.id, ctx.prisma);
 
       return invoice;
+    }),
+  clientAutocomplete: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.invoice.findMany({
+        distinct: ["clientName"],
+        where: {
+          userId: ctx.session.user.id,
+          AND: {
+            clientName: {
+              contains: input,
+            },
+          },
+        },
+        select: {
+          clientName: true,
+          clientEmail: true,
+          clientStreetAddress: true,
+          clientCity: true,
+          clientPostCode: true,
+          clientCountry: true,
+        },
+        orderBy: {
+          updatedAt: "desc",
+        },
+      });
     }),
 });
