@@ -10,8 +10,10 @@ import { api } from "~/utils/api";
 import { toast } from "react-toastify";
 import ClientAutocomplete from "./ClientAutocomplete";
 import LoadIndicator from "../LoadIndicator";
+import EmailForm from "./EmailForm";
+import { Invoice } from "@prisma/client";
 
-type FormValues = {
+export type FormValues = {
   name: string;
   idNo: string;
   streetAddress: string;
@@ -91,6 +93,8 @@ export default function InvoiceInsert({
 }) {
   const formRef = useRef<FormikProps<FormValues>>(null);
   const errorSummaryRef = useRef<HTMLDivElement>(null);
+  const [isEmailPopupOpen, setIsEmailPopupOpen] = useState(false);
+  const [clientEmailData, setClientEmailData] = useState<Invoice>();
   const { refetch: refetchInit } = api.invoice.lastUserData.useQuery(
     undefined,
     {
@@ -158,8 +162,12 @@ export default function InvoiceInsert({
         toast.error(error.message);
       }
     },
-    onSettled: async () => {
+    onSettled: async (data) => {
       await refetchInit();
+      if (submitAction === "PENDING") {
+        setClientEmailData(data);
+        setIsEmailPopupOpen(true);
+      }
     },
   });
 
@@ -179,6 +187,12 @@ export default function InvoiceInsert({
 
   return (
     <>
+      {isEmailPopupOpen && (
+        <EmailForm
+          setIsEmailPopupOpen={setIsEmailPopupOpen}
+          initData={clientEmailData}
+        />
+      )}
       <div className="h-[calc(100vh-228px)] overflow-x-hidden overflow-y-scroll pb-24 lg:h-[calc(100vh-140px)]">
         <h1 className=" ml-6 mb-5 block text-2xl font-bold text-neutral-500 dark:text-white lg:ml-0 lg:mb-11 lg:text-3xl">
           New Invoice

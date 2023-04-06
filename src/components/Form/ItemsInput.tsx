@@ -95,7 +95,7 @@ export default function ItemsInput(props: InputProps) {
               onClick={() =>
                 arrayHelpers.push({
                   name: "",
-                  quantity: 0,
+                  quantity: 1,
                   price: 0,
                   total: 0,
                 })
