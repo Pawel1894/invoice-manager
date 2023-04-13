@@ -1,5 +1,6 @@
-import { useField } from "formik";
-
+import { useField, useFormikContext } from "formik";
+import { useState } from "react";
+import { Editor, EditorProvider } from "react-simple-wysiwyg";
 type InputProps = {
   label?: string;
   name: string;
@@ -15,6 +16,9 @@ type InputProps = {
 };
 export default function CustomTextArea({ errorBottom, ...props }: InputProps) {
   const [field, meta] = useField(props);
+  const [focusIn, setFocusIn] = useState(false);
+  const { handleBlur, handleChange } = useFormikContext();
+
   return (
     <div className={`${props.styles ? props.styles : ""} relative`}>
       <label
@@ -27,19 +31,27 @@ export default function CustomTextArea({ errorBottom, ...props }: InputProps) {
       >
         {props.label}
       </label>
-      <textarea
-        rows={8}
-        disabled={props.stylemode === "disabled"}
-        className={`w-full py-[0.625rem]  font-bold ${
-          meta.touched && meta.error ? "!border-accent-100" : ""
-        } ${
-          props.stylemode === "disabled"
-            ? "bg-transparent text-neutral-400 dark:text-neutral-800"
-            : "rounded border border-neutral-900 px-5 text-neutral-500 hover:border-primary-200 focus:border-primary-200 active:border-primary-200 dark:border-neutral-100 dark:bg-neutral-200 dark:text-neutral-800 dark:hover:border-primary-200 dark:focus:border-primary-200 dark:active:border-primary-200"
-        }  `}
-        {...field}
-        {...props}
-      />
+      <div
+        className={`rounded-md border  hover:border-primary-100 ${
+          focusIn
+            ? "focusIndicator border-primary-100"
+            : "border-neutral-900 dark:border-neutral-100"
+        }`}
+      >
+        <EditorProvider>
+          <Editor
+            onFocus={() => setFocusIn(true)}
+            onBlur={(e) => {
+              handleBlur(e);
+              setFocusIn(false);
+            }}
+            id={props.id}
+            name={props.name}
+            value={field.value as string}
+            onChange={handleChange}
+          ></Editor>
+        </EditorProvider>
+      </div>
       {meta.touched && meta.error ? (
         <div
           className={`absolute ${

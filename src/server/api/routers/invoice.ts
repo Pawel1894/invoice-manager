@@ -3,6 +3,7 @@ import { z } from "zod";
 import { protectedProcedure } from "~/server/api/trpc";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { assingInvoiceItems, createInvoice } from "../helpers/InvoiceHelper";
+import { sendEmail } from "~/utils/mailer";
 
 const CreateInvoiceSchema = z.object({
   name: z.string().max(80, "too long!").nonempty("can't be empty"),
@@ -127,5 +128,32 @@ export const invoiceRouter = createTRPCRouter({
           updatedAt: "desc",
         },
       });
+    }),
+  sendInvoice: protectedProcedure
+    .input(
+      z.object({
+        invoiceId: z.string().nonempty("can't be empty"),
+        message: z.string(),
+        recipient: z.string().email("must be email"),
+        userName: z.string().nonempty("can't be empty"),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // TODO: Generate pdf file and add as attachment
+
+      const response = await sendEmail(
+        input.recipient,
+        input.message,
+        input.invoiceId,
+        input.userName
+      );
+      if (response !== 202) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Sending email failed.",
+        });
+      }
+
+      return "Success";
     }),
 });

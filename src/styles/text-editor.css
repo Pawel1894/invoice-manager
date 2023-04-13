@@ -1,0 +1,18 @@
+.dark .rsw-ce {
+  background-color: rgb(37 41 69);
+  color: rgb(235, 231, 231);
+}
+
+.rsw-ce {
+  padding-inline: 1.25rem !important;
+}
+
+.rsw-editor {
+  height: 12rem;
+  overflow-y: auto !important;
+  border-color: transparent !important;
+}
+
+.dark .rsw-editor {
+  background-color: rgb(37 41 69) !important;
+}

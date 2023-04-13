@@ -13,6 +13,7 @@
     @apply bg-neutral-700;
   }
 
+  .focusIndicator,
   *:focus {
     box-shadow: 0px 0px 0px 5px rgba(171, 248, 228, 0.6);
     outline: 2px solid transparent;

@@ -7,6 +7,7 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import "~/styles/react-datepicker.css";
 import "~/styles/react-toastify.css";
+import "~/styles/text-editor.css";
 import { ToastContainer } from "react-toastify";
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,

@@ -142,7 +142,7 @@ export default function InvoiceInsert({
                 {
                   name: item,
                   value: error.data?.zodError?.fieldErrors[item]
-                    ? error.data?.zodError?.fieldErrors[item][0]
+                    ? error.data?.zodError?.fieldErrors[item]![0]
                     : "",
                 },
               ];
@@ -152,7 +152,7 @@ export default function InvoiceInsert({
               {
                 name: item,
                 value: error.data?.zodError?.fieldErrors[item]
-                  ? error.data?.zodError?.fieldErrors[item][0]
+                  ? error.data?.zodError?.fieldErrors[item]![0]
                   : "",
               },
             ];
@@ -187,8 +187,9 @@ export default function InvoiceInsert({
 
   return (
     <>
-      {isEmailPopupOpen && (
+      {isEmailPopupOpen && clientEmailData && (
         <EmailForm
+          setIsInsertOpen={setIsInsertOpen}
           setIsEmailPopupOpen={setIsEmailPopupOpen}
           initData={clientEmailData}
         />
