@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import ClientAutocomplete from "./ClientAutocomplete";
 import LoadIndicator from "../LoadIndicator";
 import EmailForm from "./EmailForm";
-import { Invoice } from "@prisma/client";
+import type { Invoice } from "@prisma/client";
 
 export type FormValues = {
   name: string;
@@ -588,6 +588,7 @@ export default function InvoiceInsert({
 
       <div className="flex items-center justify-center gap-x-2 bg-white py-[1.375rem] shadow-upper dark:bg-transparent dark:shadow-none lg:justify-end lg:bg-transparent lg:px-6 lg:shadow-none">
         <Button
+          type="button"
           stylemode="default"
           className="lg:mr-auto"
           onClick={() => {
@@ -597,10 +598,18 @@ export default function InvoiceInsert({
         >
           Discard
         </Button>
-        <Button stylemode="accent" onClick={() => handleSubmit("DRAFT")}>
+        <Button
+          type="submit"
+          stylemode="accent"
+          onClick={() => handleSubmit("DRAFT")}
+        >
           Save as Draft
         </Button>
-        <Button stylemode="primary" onClick={() => handleSubmit("PENDING")}>
+        <Button
+          type="submit"
+          stylemode="primary"
+          onClick={() => handleSubmit("PENDING")}
+        >
           Save & Send
         </Button>
       </div>

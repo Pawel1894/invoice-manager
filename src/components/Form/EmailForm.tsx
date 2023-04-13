@@ -1,6 +1,5 @@
 import { Form, Formik, type FormikProps } from "formik";
 import React, { useRef } from "react";
-import type { FormValues } from "./InvoiceInsert";
 import * as Yup from "yup";
 import CustomInput from "./CustomInput";
 import { type Invoice } from "@prisma/client";
@@ -63,7 +62,7 @@ export default function EmailForm({ setIsEmailPopupOpen, initData }: Props) {
                 styles="my-5"
               />
               <div className="flex justify-end">
-                <Button stylemode="primary">
+                <Button type="submit" stylemode="primary">
                   <span>send icon</span>
                   <span>Send</span>
                 </Button>

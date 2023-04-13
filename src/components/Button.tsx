@@ -3,6 +3,7 @@ import React from "react";
 type Props = {
   stylemode?: "default" | "accent" | "primary";
   className?: string;
+  type?: "submit" | "button";
 };
 
 const styles = {
@@ -15,6 +16,7 @@ const styles = {
 export default function Button({
   stylemode,
   className,
+  type,
   ...props
 }: Props &
   React.DetailedHTMLProps<
@@ -23,6 +25,7 @@ export default function Button({
   >) {
   return (
     <button
+      type={type}
       className={`rounded-3xl px-4 py-3 text-sm font-bold   ${
         stylemode ? styles[stylemode] : styles["default"]
       } ${className ? className : ""}`}

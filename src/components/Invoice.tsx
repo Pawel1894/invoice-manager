@@ -38,7 +38,7 @@ export default function Invoice({
       href={`/invoice/${id}`}
       className="grid w-full  grid-cols-2 gap-y-2 rounded-lg bg-white p-6 shadow-light dark:bg-neutral-100 md:grid-cols-[2fr_2fr_3fr_2fr_2fr_0.5fr] md:items-center md:justify-items-center"
     >
-      <span className="row-start-1 mb-5 justify-self-start font-bold dark:text-white md:row-auto  md:mb-0 md:justify-self-auto md:text-base">
+      <span className="row-start-1 mb-5 justify-self-start font-bold dark:text-white md:row-auto  md:mb-0 md:text-base">
         <span className="text-accent-300 ">#</span>
         {number}
       </span>
