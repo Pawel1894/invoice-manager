@@ -20,7 +20,7 @@ export default function User() {
           }
           width={32}
           height={32}
-          alt={"Your profile"}
+          alt={"profile image"}
         />
       </button>
       {isComponentVisible ? (
@@ -39,7 +39,7 @@ export default function User() {
                   ? data?.user.image
                   : "/assets/image-avatar.webp"
               }
-              alt={"Your profile"}
+              alt={"profile image"}
               width={64}
               height={64}
             />

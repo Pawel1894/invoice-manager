@@ -15,9 +15,21 @@ import Popup from "~/components/Popup";
 import CreateInvoiceForm from "~/components/Form/InvoiceInsert";
 
 export default function Invoice() {
-  const { data: theme } = api.user.getPrefTheme.useQuery();
+  const { data: theme } = api.user.getPrefTheme.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
   const { data: invoicesData } = api.invoice.getInvoices.useQuery();
   const [isInsertOpen, setIsInsertOpen] = useState(false);
+
+  const { mutate: FestTest } = api.invoice.testPdf.useMutation({
+    onSuccess: (data) => {
+      console.log("pdf", data);
+      const a = document.createElement("a");
+      a.href = data;
+      a.target = "_blank";
+      a.click();
+    },
+  });
 
   useEffect(() => {
     if (theme?.darkMode) {
@@ -39,6 +51,7 @@ export default function Invoice() {
           </Popup>
 
           <div className="mx-6 pt-8 md:mx-12 lg:pt-20">
+            <button onClick={() => FestTest()}>TEST</button>
             <div className="mx-auto flex max-w-screen-lg items-center justify-between ">
               <div>
                 <h1 className="text-2xl font-bold leading-none dark:text-white md:text-4xl">

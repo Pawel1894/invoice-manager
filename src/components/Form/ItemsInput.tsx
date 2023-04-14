@@ -1,6 +1,9 @@
-import { ErrorMessage, FieldArray, useField } from "formik";
+import { FieldArray, useField, useFormikContext } from "formik";
 import React from "react";
 import CustomInput from "./CustomInput";
+import type { InvoiceItem } from "@prisma/client";
+import { countryName, formatCurrency, getGross } from "~/utils/calcs";
+import { format } from "number-to-local-currency";
 
 type InputProps = {
   label: string;
@@ -10,17 +13,13 @@ type InputProps = {
   id: string;
   styles?: string;
 };
-
-type items = Array<{
-  name: string;
-  quantity: number;
-  price: number;
-  total: number;
-}>;
+type items = Array<InvoiceItem>;
 
 export default function ItemsInput(props: InputProps) {
   const [field] = useField(props);
+  const currency = useField("currency");
   const values = field.value as items;
+
   return (
     <div>
       <label className="block text-lg font-bold text-neutral-900">
@@ -32,7 +31,7 @@ export default function ItemsInput(props: InputProps) {
           <div>
             {values.map((item, index) => (
               <div className={`${index !== 0 ? "mt-12" : "mt-6"}`} key={index}>
-                <div className="mt-6 grid  grid-cols-[2fr_3fr_3fr_1fr] items-center gap-x-3 gap-y-6 lg:grid-cols-[6fr_2fr_3fr_3fr_1fr] lg:gap-x-4">
+                <div className="mt-6 grid  grid-cols-[2fr_3fr_3fr] items-center gap-x-3 gap-y-6 lg:grid-cols-[6fr_2fr_3fr_3fr] lg:gap-x-4">
                   <CustomInput
                     type="text"
                     label="Item Name"
@@ -55,19 +54,45 @@ export default function ItemsInput(props: InputProps) {
                     id={`items.${index}.price`}
                     errorBottom={true}
                   />
+
                   <CustomInput
                     type="number"
-                    stylemode="disabled"
-                    label="Total"
-                    name={`items.${index}.total`}
-                    id={`items.${index}.total`}
-                    value={
-                      isNaN(item.quantity * item.price)
-                        ? "0"
-                        : String((item.quantity * item.price).toFixed(2))
-                    }
+                    label="Tax %"
+                    name={`items.${index}.tax`}
+                    id={`items.${index}.tax`}
+                    errorBottom={true}
                   />
-
+                </div>
+                <div className="mt-4 flex items-center gap-4">
+                  <div className="w-full">
+                    <label
+                      className={`mb-2 block text-sm text-neutral-900 dark:text-neutral-600`}
+                    >
+                      Net
+                    </label>
+                    <span className="block max-w-[8rem] overflow-hidden text-ellipsis whitespace-nowrap text-neutral-400 dark:text-neutral-800 lg:max-w-[14rem]">
+                      {isNaN(item.quantity * item.price)
+                        ? formatCurrency(currency[1].value as countryName, 0)
+                        : formatCurrency(
+                            currency[1].value as countryName,
+                            item.quantity * item.price
+                          )}
+                    </span>
+                  </div>
+                  <div className="w-full">
+                    <label
+                      className={`mb-2 block text-sm text-neutral-900 dark:text-neutral-600`}
+                    >
+                      Gross
+                    </label>
+                    <span className="block max-w-[8rem] overflow-hidden text-ellipsis whitespace-nowrap text-neutral-400 dark:text-neutral-800 lg:max-w-[14rem]">
+                      {getGross(
+                        item.quantity * item.price,
+                        item.tax,
+                        currency[1].value as countryName
+                      )}
+                    </span>
+                  </div>
                   <button
                     className="translate-y-3"
                     type="button"
@@ -97,7 +122,9 @@ export default function ItemsInput(props: InputProps) {
                   name: "",
                   quantity: 1,
                   price: 0,
-                  total: 0,
+                  tax: 0,
+                  net: 0,
+                  gross: 0,
                 })
               }
             >

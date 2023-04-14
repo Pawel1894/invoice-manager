@@ -16,6 +16,7 @@ import type { Invoice } from "@prisma/client";
 export type FormValues = {
   name: string;
   idNo: string;
+  clientId: string;
   streetAddress: string;
   city: string;
   postCode: string;
@@ -31,17 +32,21 @@ export type FormValues = {
   projectDescription: string;
   invoiceNum: string;
   bankAccount: string;
+  currency: string;
   items: Array<{
     name: string;
     quantity: number;
     price: number;
-    total: number;
+    tax: number;
+    net: number;
+    gross: number;
   }>;
 };
 
 const valSchema = Yup.object({
   name: Yup.string().max(80, "too long!").required("can't be empty"),
   idNo: Yup.string().max(40, "too long!"),
+  clientId: Yup.string().max(40, "too long!"),
   streetAddress: Yup.string().min(1, "too short!").max(40, "too long!"),
   city: Yup.string().min(1, "too short!").max(40, "too long!"),
   postCode: Yup.string().min(1, "too short!").max(40, "too long!"),
@@ -62,6 +67,7 @@ const valSchema = Yup.object({
     .min(1, "too short!")
     .max(40, "too long!")
     .required("can't be empty"),
+  currency: Yup.string(),
   invoiceNum: Yup.string().required("can't be empty"),
   clientCountry: Yup.string()
     .min(1, "too short!")
@@ -81,7 +87,9 @@ const valSchema = Yup.object({
         .positive("can't be negative")
         .required("must be a number"),
       price: Yup.number().required("must be a number"),
-      total: Yup.number(),
+      tax: Yup.number().required("must be a number"),
+      net: Yup.number().required("must be a number"),
+      gross: Yup.number().required("must be a number"),
     })
   ),
 });
@@ -111,6 +119,7 @@ export default function InvoiceInsert({
           formRef.current.initialValues.idNo = data?.idNo ?? "";
         }
       },
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -202,9 +211,11 @@ export default function InvoiceInsert({
           innerRef={formRef}
           validationSchema={valSchema}
           initialValues={{
+            currency: "US",
             city: "",
             name: "",
             idNo: "",
+            clientId: "",
             clientCity: "",
             clientCountry: "",
             clientEmail: "",
@@ -222,7 +233,9 @@ export default function InvoiceInsert({
                 name: "",
                 quantity: 1,
                 price: 0,
-                total: 0,
+                tax: 0,
+                net: 0,
+                gross: 0,
               },
             ],
             invoiceDate: new Date(),
@@ -291,12 +304,6 @@ export default function InvoiceInsert({
                   <span className="mb-6 mt-12 block text-primary-100">
                     Bill To
                   </span>
-                  {/* <CustomInput
-                    label="Client's Name"
-                    name="clientName"
-                    type="text"
-                    id="clientName"
-                  /> */}
                   <ClientAutocomplete
                     label="Client's Name"
                     name="clientName"
@@ -308,6 +315,14 @@ export default function InvoiceInsert({
                     type="email"
                     id="clientEmail"
                     styles="mt-6"
+                  />
+                  <CustomInput
+                    label="Client's Identification No."
+                    name="clientId"
+                    type="text"
+                    id="clientId"
+                    styles="mt-6"
+                    placeholder="eg. EIN 0123456789"
                   />
                   <CustomInput
                     label="Street Address"
@@ -337,7 +352,7 @@ export default function InvoiceInsert({
                       styles="col-span-full lg:col-span-1"
                     />
                   </div>
-                  <div className="mt-12 flex flex-col gap-6 lg:flex-row">
+                  <div className="mt-16 flex flex-col gap-6 lg:flex-row">
                     <CustomDatePicker
                       label="Invoice Date"
                       name="invoiceDate"
@@ -380,7 +395,30 @@ export default function InvoiceInsert({
                     name="projectDescription"
                     id="projectDescription"
                     placeholder="e.g. Graphic Design Service"
-                    styles="mt-6"
+                    styles="my-6"
+                  />
+                  <FormikCustomDropdown
+                    label="Currency"
+                    options={[
+                      {
+                        label: "USD",
+                        value: "US",
+                      },
+                      {
+                        label: "PLN",
+                        value: "PL",
+                      },
+                      {
+                        label: "GBP",
+                        value: "GB",
+                      },
+                      {
+                        label: "EUR",
+                        value: "DE",
+                      },
+                    ]}
+                    name="currency"
+                    id="currency"
                   />
                   <div className="mt-16">
                     <ItemsInput id="items" name="items" label="Item List" />

@@ -16,12 +16,15 @@ interface Client {
   clientCity: string;
   clientPostCode: string;
   clientCountry: string;
+  clientId: string;
 }
 
 export default function ClientAutocomplete(props: Props) {
   const [query, setQuery] = useState("");
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-  const { data: options } = api.invoice.clientAutocomplete.useQuery(query);
+  const { data: options } = api.invoice.clientAutocomplete.useQuery(query, {
+    refetchOnWindowFocus: false,
+  });
   const name = props.name;
   const [field, meta] = useField<string>(name);
   const { setFieldValue, setFieldTouched, validateField } = useFormikContext();
@@ -35,12 +38,14 @@ export default function ClientAutocomplete(props: Props) {
     setFieldValue("clientCity", client.clientCity);
     setFieldValue("clientPostCode", client.clientPostCode);
     setFieldValue("clientCountry", client.clientCountry);
+    setFieldValue("clientId", client.clientId);
 
     setFieldTouched("clientEmail", false);
     setFieldTouched("clientStreetAddress", false);
     setFieldTouched("clientCity", false);
     setFieldTouched("clientPostCode", false);
     setFieldTouched("clientCountry", false);
+    setFieldTouched("clientId", false);
   };
 
   return (
