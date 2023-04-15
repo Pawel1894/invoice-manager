@@ -31,7 +31,9 @@ export default function Popup({ isOpen, setIsInsertOpen, children }: Props) {
               fillRule="evenodd"
             />
           </svg>
-          <span>Go back</span>
+          <span className="text-neutral-500 dark:text-neutral-600">
+            Go back
+          </span>
         </button>
         <div
           className={`${

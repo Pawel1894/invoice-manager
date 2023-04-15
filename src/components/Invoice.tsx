@@ -4,6 +4,7 @@ import React from "react";
 import dayjs from "dayjs";
 import { format } from "number-to-local-currency";
 import Link from "next/link";
+import { countryName, formatCurrency } from "~/utils/calcs";
 
 const statusStyle: {
   [key in Status]: { bg: string; text: string; accent: string };
@@ -31,6 +32,7 @@ export default function Invoice({
   dueDate,
   clientName,
   totalAmount,
+  currencyCountry,
   status,
 }: Props) {
   return (
@@ -49,10 +51,10 @@ export default function Invoice({
         {clientName}
       </span>
       <span
-        title={format(totalAmount, "en-GB")}
+        title={formatCurrency(currencyCountry as countryName, totalAmount)}
         className="md:just-self-a col-start-1 row-start-3 w-full justify-self-start overflow-hidden text-ellipsis whitespace-nowrap text-left dark:text-white md:col-auto md:row-auto md:text-right "
       >
-        {format(totalAmount, "en-GB")}
+        {formatCurrency(currencyCountry as countryName, totalAmount)}
       </span>
       <div className="row-span-2 flex items-center justify-self-end md:row-auto md:justify-self-end">
         <div
