@@ -34,6 +34,19 @@ export default function EmailForm({
     value: string | undefined;
   }> | null>(null);
 
+  const { mutate: previewInvoice } = api.invoice.getPdfDoc.useMutation({
+    onSuccess: (data) => {
+      const a = document.createElement("a");
+      a.href = data;
+      a.download = `${initData.name} ${initData.number}.pdf`;
+      a.target = "_blank";
+      a.click();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const { mutate: sendInvoice, status: sendingStatus } =
     api.invoice.sendInvoice.useMutation({
       onError: (error) => {
@@ -172,17 +185,30 @@ export default function EmailForm({
                           </div>
                         )}
                       </div>
-                      <Button type="submit" stylemode="primary">
-                        <div className="flex gap-2">
-                          <Image
-                            src="/assets/icon-send.svg"
-                            alt="sending icon"
-                            width="18"
-                            height="18"
-                          />
-                          <span>Send</span>
-                        </div>
-                      </Button>
+                      <div className="flex gap-3">
+                        <Button
+                          type="button"
+                          stylemode="default"
+                          onClick={() =>
+                            previewInvoice({ invoiceId: initData.id })
+                          }
+                        >
+                          <div className="flex gap-2">
+                            <span>Preview</span>
+                          </div>
+                        </Button>
+                        <Button type="submit" stylemode="primary">
+                          <div className="flex gap-2">
+                            <Image
+                              src="/assets/icon-send.svg"
+                              alt="sending icon"
+                              width="18"
+                              height="18"
+                            />
+                            <span>Send</span>
+                          </div>
+                        </Button>
+                      </div>
                     </div>
                   </>
                 )}

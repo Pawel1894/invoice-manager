@@ -128,6 +128,7 @@ export const invoiceRouter = createTRPCRouter({
           clientCity: true,
           clientPostCode: true,
           clientCountry: true,
+          clientId: true,
         },
         orderBy: {
           updatedAt: "desc",
@@ -144,51 +145,87 @@ export const invoiceRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // TODO: Generate pdf file and add as attachment
+      const invoice = await ctx.prisma.invoice.findFirst({
+        where: {
+          id: input.invoiceId,
+        },
+        include: {
+          items: true,
+        },
+      });
 
-      const response = await sendEmail(
-        input.recipient,
-        input.message,
-        input.invoiceId,
-        input.userName
-      );
-      if (response !== 202) {
+      if (!invoice) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Sending email failed.",
+          code: "NOT_FOUND",
+          message: "Invoice not found",
         });
       }
 
+      try {
+        const invoiceDoc = await generateInvoiceDoc(ctx.origin, invoice);
+
+        const attachment = {
+          content: Buffer.from(invoiceDoc).toString("base64"),
+          filename: `${invoice.name} ${invoice.number}`,
+          type: "application/pdf",
+          disposition: "attachment",
+        };
+
+        const response = await sendEmail(
+          input.recipient,
+          input.message,
+          input.invoiceId,
+          input.userName,
+          [attachment]
+        );
+        if (response !== 202) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Sending email failed.",
+          });
+        }
+      } catch (error) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Generating pdf file failed",
+        });
+      }
       return "Success";
     }),
-  getPdfDoc: publicProcedure.mutation(async ({ ctx }) => {
-    const invoice = await ctx.prisma.invoice.findFirst({
-      where: {
-        id: "clggxw87i0001v3dkxh8l83gx",
-      },
-      include: {
-        items: true,
-      },
-    });
-
-    if (!invoice) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Invoice not found",
+  getPdfDoc: protectedProcedure
+    .input(
+      z.object({
+        invoiceId: z.string().nonempty("can't be empty"),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const invoice = await ctx.prisma.invoice.findFirst({
+        where: {
+          id: input.invoiceId,
+        },
+        include: {
+          items: true,
+        },
       });
-    }
 
-    try {
-      const invoiceDoc = await generateInvoiceDoc(ctx.origin, invoice);
-      return (
-        "data:application/pdf;base64," +
-        Buffer.from(invoiceDoc).toString("base64")
-      );
-    } catch (error) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Generating pdf file failed",
-      });
-    }
-  }),
+      if (!invoice) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Invoice not found",
+        });
+      }
+
+      try {
+        const invoiceDoc = await generateInvoiceDoc(ctx.origin, invoice);
+        return (
+          "data:application/pdf;base64," +
+          Buffer.from(invoiceDoc).toString("base64")
+        );
+      } catch (error) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Generating pdf file failed",
+        });
+      }
+    }),
 });

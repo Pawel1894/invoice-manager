@@ -7,14 +7,21 @@ export async function sendEmail(
   recipient: string,
   text: string,
   invoiceId: string,
-  userName: string
+  userName: string,
+  attachments?: Array<{
+    content: string;
+    filename: string;
+    type: string;
+    disposition: string;
+  }>
 ) {
   const msg = {
     to: recipient,
     from: emailFrom,
-    subject: `${userName} ${invoiceId} invoice`,
+    subject: `${userName} invoice`,
     text: text,
     html: text,
+    attachments: attachments,
   };
 
   const response = await sgMail.send(msg);
