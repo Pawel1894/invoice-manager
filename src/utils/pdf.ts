@@ -96,15 +96,50 @@ export async function generateInvoiceDoc(
   doc.font(mainFont).fontSize(7).fill("#000").text(`Gross`, 500, 220);
 
   let lastItemHeight = 220;
+  let currentHeight = 220;
+  let iterator = 1;
 
   invoice.items.forEach((item, i) => {
-    const height = (i + 1) * 30 + 220;
+    let height = iterator * 30 + currentHeight;
+
+    if (height > 720) {
+      doc
+        .lineJoin("bevel")
+        .rect(10, height, doc.page.width - 20, 1)
+        .fill("#ccc");
+      doc.addPage();
+      height = 65;
+      currentHeight = 35;
+      iterator = 1;
+
+      doc
+        .lineJoin("bevel")
+        .rect(10, 30, doc.page.width - 20, 20)
+        .fill("#ccc");
+
+      doc.font(mainFont).fontSize(7).fill("#000").text(`LP`, 20, 35);
+      doc.font(mainFont).fontSize(7).fill("#000").text(`Name`, 60, 35);
+      doc.font(mainFont).fontSize(7).fill("#000").text(`Quantity`, 240, 35);
+      doc.font(mainFont).fontSize(7).fill("#000").text(`Price`, 290, 35);
+      doc.font(mainFont).fontSize(7).fill("#000").text(`Tax %`, 365, 35);
+      doc.font(mainFont).fontSize(7).fill("#000").text(`Net`, 400, 35);
+      doc.font(mainFont).fontSize(7).fill("#000").text(`Gross`, 500, 35);
+    }
+
     doc
       .font(mainFont)
       .fontSize(7)
       .fill("#000")
       .text(String(i + 1), 20, height, {
         width: 40,
+      });
+
+    doc
+      .font(mainFont)
+      .fontSize(7)
+      .fill("#000")
+      .text(String(doc.page.height), 0, 0, {
+        width: 180,
       });
 
     doc.font(mainFont).fontSize(7).fill("#000").text(item.name, 60, height, {
@@ -163,16 +198,23 @@ export async function generateInvoiceDoc(
         }
       );
     lastItemHeight = height;
+    iterator++;
   });
 
-  doc
-    .lineJoin("bevel")
-    .rect(10, lastItemHeight + 25, doc.page.width - 20, 1)
-    .fill("#ccc");
+  if (lastItemHeight < 730) {
+    doc
+      .lineJoin("bevel")
+      .rect(10, lastItemHeight + 25, doc.page.width - 20, 1)
+      .fill("#ccc");
+  }
 
-  const summaryHeight = lastItemHeight + 100;
+  let summaryHeight = lastItemHeight + 100;
 
-  // Summary
+  if (summaryHeight + 60 > 725) {
+    doc.addPage();
+    summaryHeight = 30;
+  }
+
   doc
     .font(mainFontBold)
     .fontSize(8)
