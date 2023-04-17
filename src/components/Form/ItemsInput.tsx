@@ -28,9 +28,13 @@ export default function ItemsInput(props: InputProps) {
       <FieldArray
         name={props.name}
         render={(arrayHelpers) => (
-          <div>
+          <div data-testid="insert-items-container">
             {values.map((item, index) => (
-              <div className={`${index !== 0 ? "mt-12" : "mt-6"}`} key={index}>
+              <div
+                data-testid={`insert-item-${index}`}
+                className={`${index !== 0 ? "mt-12" : "mt-6"}`}
+                key={index}
+              >
                 <div className="mt-6 grid  grid-cols-[2fr_3fr_3fr] items-center gap-x-3 gap-y-6 lg:grid-cols-[6fr_2fr_3fr_3fr] lg:gap-x-4">
                   <CustomInput
                     type="text"
@@ -70,7 +74,10 @@ export default function ItemsInput(props: InputProps) {
                     >
                       Net
                     </label>
-                    <span className="block max-w-[8rem] overflow-hidden text-ellipsis whitespace-nowrap text-neutral-400 dark:text-neutral-800 lg:max-w-[14rem]">
+                    <span
+                      data-testid={`items.${index}.net`}
+                      className="block max-w-[8rem] overflow-hidden text-ellipsis whitespace-nowrap text-neutral-400 dark:text-neutral-800 lg:max-w-[14rem]"
+                    >
                       {isNaN(item.quantity * item.price)
                         ? formatCurrency(currency[1].value as countryName, 0)
                         : formatCurrency(
@@ -85,7 +92,10 @@ export default function ItemsInput(props: InputProps) {
                     >
                       Gross
                     </label>
-                    <span className="block max-w-[8rem] overflow-hidden text-ellipsis whitespace-nowrap text-neutral-400 dark:text-neutral-800 lg:max-w-[14rem]">
+                    <span
+                      data-testid={`items.${index}.gross`}
+                      className="block max-w-[8rem] overflow-hidden text-ellipsis whitespace-nowrap text-neutral-400 dark:text-neutral-800 lg:max-w-[14rem]"
+                    >
                       {getGross(
                         item.quantity * item.price,
                         item.tax,
@@ -115,6 +125,7 @@ export default function ItemsInput(props: InputProps) {
             ))}
 
             <button
+              data-testid="insert-new-item"
               className="mt-12 w-full rounded-3xl bg-neutral-600 py-3 text-center font-bold text-neutral-900 dark:bg-neutral-200 dark:text-neutral-600"
               type="button"
               onClick={() =>

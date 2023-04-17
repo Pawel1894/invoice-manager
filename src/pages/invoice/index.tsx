@@ -61,6 +61,7 @@ export default function Invoice() {
               <div className="flex items-center gap-x-4 md:gap-x-11">
                 <Filter />
                 <button
+                  data-testid="new-invoice"
                   className="flex items-center gap-x-2 rounded-3xl bg-primary-100 py-2 pl-2 pr-4 text-sm text-white"
                   onClick={() => setIsInsertOpen(true)}
                 >

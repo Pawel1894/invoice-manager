@@ -102,6 +102,7 @@ export default function ClientAutocomplete(props: Props) {
       </Combobox>
       {meta.touched && meta.error ? (
         <div
+          data-testid={`error-${props.id}`}
           className={`absolute top-0 right-0 text-xs leading-5 text-accent-100`}
         >
           {meta.error}

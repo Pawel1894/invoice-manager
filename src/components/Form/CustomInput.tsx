@@ -41,6 +41,7 @@ export default function CustomInput({ errorBottom, ...props }: InputProps) {
       />
       {meta.touched && meta.error ? (
         <div
+          data-testid={`error-${props.id}`}
           className={`absolute ${
             errorBottom ? "top-full" : "top-0"
           }  right-0 text-xs leading-5 text-accent-100`}

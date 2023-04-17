@@ -47,9 +47,18 @@ const valSchema = Yup.object({
   name: Yup.string().max(80, "too long!").required("can't be empty"),
   idNo: Yup.string().max(40, "too long!"),
   clientId: Yup.string().max(40, "too long!"),
-  streetAddress: Yup.string().min(1, "too short!").max(40, "too long!"),
-  city: Yup.string().min(1, "too short!").max(40, "too long!"),
-  postCode: Yup.string().min(1, "too short!").max(40, "too long!"),
+  streetAddress: Yup.string()
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
+  city: Yup.string()
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
+  postCode: Yup.string()
+    .min(1, "too short!")
+    .max(40, "too long!")
+    .required("can't be empty"),
   country: Yup.string()
     .min(1, "too short!")
     .max(40, "too long!")
@@ -250,7 +259,7 @@ export default function InvoiceInsert({
             createInvoice(requestData);
           }}
         >
-          <Form>
+          <Form data-testid="insert-form">
             {isLoading ? (
               <div className="flex justify-center">
                 <LoadIndicator />
@@ -638,6 +647,7 @@ export default function InvoiceInsert({
           Discard
         </Button>
         <Button
+          data-testid="insert-draft"
           type="submit"
           stylemode="accent"
           onClick={() => handleSubmit("DRAFT")}
