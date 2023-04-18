@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { protectedProcedure, publicProcedure } from "~/server/api/trpc";
+import { protectedProcedure } from "~/server/api/trpc";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { assingInvoiceItems, createInvoice } from "../helpers/InvoiceHelper";
 import { sendEmail } from "~/utils/mailer";
@@ -58,16 +58,42 @@ const CreateInvoiceSchema = z.object({
 export type CreateInvoiceInput = z.infer<typeof CreateInvoiceSchema>;
 
 export const invoiceRouter = createTRPCRouter({
-  getInvoices: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.invoice.findMany({
-      where: {
-        userId: ctx.session.user.id,
-      },
-      orderBy: {
-        invoiceDate: "desc",
-      },
-    });
-  }),
+  getInvoices: protectedProcedure
+    .input(
+      z
+        .object({
+          Paid: z.boolean(),
+          Pending: z.boolean(),
+          Draft: z.boolean(),
+        })
+        .nullable()
+    )
+    .query(async ({ ctx, input }) => {
+      const filterStatus: Array<"DRAFT" | "PAID" | "PENDING"> = [];
+
+      if (input) {
+        input.Draft ? filterStatus.push("DRAFT") : null;
+        input.Paid ? filterStatus.push("PAID") : null;
+        input.Pending ? filterStatus.push("PENDING") : null;
+      }
+
+      return await ctx.prisma.invoice.findMany({
+        where: {
+          userId: ctx.session.user.id,
+          AND: {
+            status: {
+              in:
+                filterStatus?.length > 0
+                  ? filterStatus
+                  : ["DRAFT", "PAID", "PENDING"],
+            },
+          },
+        },
+        orderBy: {
+          invoiceDate: "desc",
+        },
+      });
+    }),
   create: protectedProcedure
     .input(CreateInvoiceSchema)
     .mutation(async ({ ctx, input }) => {

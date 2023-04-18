@@ -1,9 +1,17 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import Checkbox from "./Checkbox";
+import type { ActiveFilter } from "~/pages/invoice";
 
-export default function Filter() {
+type Props = {
+  setFilters: React.Dispatch<React.SetStateAction<ActiveFilter>>;
+  filters: ActiveFilter;
+};
+
+export default function Filter({ setFilters, filters }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const anyActive = filters.Draft || filters.Paid || filters.Pending;
 
   return (
     <div className="relative">
@@ -11,7 +19,13 @@ export default function Filter() {
         className="flex items-center gap-x-3 font-bold text-neutral-500 dark:text-white"
         onClick={() => setIsOpen((prevState) => !prevState)}
       >
-        <span>
+        <span className={anyActive ? "text-primary-100" : ""}>
+          {anyActive
+            ? `(${Object.values(filters).reduce(
+                (sum, item) => sum + (item === true ? 1 : 0),
+                0
+              )})`
+            : ""}{" "}
           Filter <span className="hidden md:inline">by status</span>
         </span>
         <Image
@@ -29,9 +43,15 @@ export default function Filter() {
       >
         <li>
           <Checkbox
-            text="Paid"
+            text="Draft"
             onChange={(e) => {
-              console.log(e);
+              const value = e.target.checked;
+              setFilters((prevState) => {
+                return {
+                  ...prevState,
+                  Draft: value,
+                };
+              });
             }}
           />
         </li>
@@ -39,7 +59,13 @@ export default function Filter() {
           <Checkbox
             text="Pending"
             onChange={(e) => {
-              console.log(e);
+              const value = e.target.checked;
+              setFilters((prevState) => {
+                return {
+                  ...prevState,
+                  Pending: value,
+                };
+              });
             }}
           />
         </li>
@@ -47,7 +73,13 @@ export default function Filter() {
           <Checkbox
             text="Paid"
             onChange={(e) => {
-              console.log(e);
+              const value = e.target.checked;
+              setFilters((prevState) => {
+                return {
+                  ...prevState,
+                  Paid: value,
+                };
+              });
             }}
           />
         </li>

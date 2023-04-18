@@ -13,12 +13,25 @@ import Image from "next/image";
 import InvoiceDisplay from "~/components/Invoice";
 import Popup from "~/components/Popup";
 import CreateInvoiceForm from "~/components/Form/InvoiceInsert";
+import LoadIndicator from "~/components/LoadIndicator";
+
+export type ActiveFilter = {
+  Paid: boolean;
+  Pending: boolean;
+  Draft: boolean;
+};
 
 export default function Invoice() {
   const { data: theme } = api.user.getPrefTheme.useQuery(undefined, {
     refetchOnWindowFocus: false,
   });
-  const { data: invoicesData } = api.invoice.getInvoices.useQuery();
+  const [filters, setFilters] = useState<ActiveFilter>({
+    Draft: false,
+    Paid: false,
+    Pending: false,
+  });
+  const { data: invoicesData, isLoading } =
+    api.invoice.getInvoices.useQuery(filters);
   const [isInsertOpen, setIsInsertOpen] = useState(false);
 
   useEffect(() => {
@@ -59,7 +72,7 @@ export default function Invoice() {
                 </span>
               </div>
               <div className="flex items-center gap-x-4 md:gap-x-11">
-                <Filter />
+                <Filter filters={filters} setFilters={setFilters} />
                 <button
                   data-testid="new-invoice"
                   className="flex items-center gap-x-2 rounded-3xl bg-primary-100 py-2 pl-2 pr-4 text-sm text-white"
@@ -79,7 +92,11 @@ export default function Invoice() {
                 </button>
               </div>
             </div>
-            {!invoicesData?.length ? (
+            {isLoading ? (
+              <div className="mx-auto grid h-[calc(100vh-10.5rem)] max-w-screen-lg place-content-center overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-9.5rem)]">
+                <LoadIndicator />
+              </div>
+            ) : !invoicesData?.length ? (
               <div className="mx-auto grid h-[calc(100vh-10.5rem)] max-w-screen-lg place-content-center overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-9.5rem)]">
                 <NoInvoices />
               </div>
@@ -125,7 +142,7 @@ export const getServerSideProps = async ({
   });
 
   await ssg.user.getPrefTheme.prefetch();
-  await ssg.invoice.getInvoices.prefetch();
+  await ssg.invoice.getInvoices.prefetch(null);
 
   return {
     props: {
