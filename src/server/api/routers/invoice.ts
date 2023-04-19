@@ -94,6 +94,19 @@ export const invoiceRouter = createTRPCRouter({
         },
       });
     }),
+  get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.prisma.invoice.findFirst({
+      where: {
+        userId: ctx.session.user.id,
+        AND: {
+          id: input,
+        },
+      },
+      include: {
+        items: true,
+      },
+    });
+  }),
   create: protectedProcedure
     .input(CreateInvoiceSchema)
     .mutation(async ({ ctx, input }) => {

@@ -6,7 +6,7 @@ import { format } from "number-to-local-currency";
 import Link from "next/link";
 import { countryName, formatCurrency } from "~/utils/calcs";
 
-const statusStyle: {
+export const statusStyle: {
   [key in Status]: { bg: string; text: string; accent: string };
 } = {
   DRAFT: {
@@ -45,7 +45,7 @@ export default function Invoice({
         {number}
       </span>
       <span className="col-span-1 row-start-2 justify-self-start text-sm text-neutral-300 md:col-auto md:row-auto md:justify-self-auto">
-        Due {dayjs(dueDate).format("DD MMM YYYY")}
+        Due {dayjs(dueDate.toString()).format("LL")}
       </span>
       <span className="col-span-2 row-start-1 justify-self-end text-right text-sm text-accent-300 dark:text-white md:col-auto md:row-auto md:justify-self-auto md:text-base">
         {clientName}

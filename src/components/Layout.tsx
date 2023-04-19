@@ -15,7 +15,6 @@ const spartan = League_Spartan({
 });
 
 export default function Layout({ children, isDarkMode }: Props) {
-  console.log("isDarkModeisDarkMode", isDarkMode);
   return (
     <div>
       <aside
