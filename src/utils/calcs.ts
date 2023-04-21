@@ -12,6 +12,7 @@ export function getGross(base: number, tax: number, country: countryName) {
 export type countryName = "US" | "PL" | "GB" | "DE";
 
 export function formatCurrency(country: countryName, value: number) {
+  if (!country) return String(value);
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: countryToCurrency[country],

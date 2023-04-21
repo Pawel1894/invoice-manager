@@ -1,7 +1,7 @@
 import React from "react";
 
 type Props = {
-  stylemode?: "default" | "accent" | "primary";
+  stylemode?: "default" | "accent" | "primary" | "danger";
   className?: string;
   type?: "submit" | "button";
 };
@@ -11,6 +11,7 @@ const styles = {
     "bg-neutral-600 text-neutral-900 dark:bg-neutral-200 dark:text-neutral-300",
   accent: "bg-accent-400 text-white",
   primary: "bg-primary-100 text-white",
+  danger: "bg-accent-100 text-white",
 };
 
 export default function Button({
@@ -26,7 +27,7 @@ export default function Button({
   return (
     <button
       type={type}
-      className={`rounded-3xl px-4 py-3 text-sm font-bold   ${
+      className={`rounded-3xl px-4 py-3 text-sm  font-bold   ${
         stylemode ? styles[stylemode] : styles["default"]
       } ${className ? className : ""}`}
       {...props}
