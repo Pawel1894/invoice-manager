@@ -5,6 +5,7 @@ import { createTRPCRouter } from "~/server/api/trpc";
 import { assingInvoiceItems, createInvoice } from "../helpers/InvoiceHelper";
 import { sendEmail } from "~/utils/mailer";
 import { generateInvoiceDoc } from "~/utils/pdf";
+import { inputCSS } from "react-select/dist/declarations/src/components/Input";
 
 const CreateInvoiceSchema = z.object({
   name: z.string().max(80, "too long!").nonempty("can't be empty"),
@@ -193,6 +194,17 @@ export const invoiceRouter = createTRPCRouter({
         },
       });
 
+      if (invoice?.status === "DRAFT") {
+        await ctx.prisma.invoice.update({
+          where: {
+            id: input.invoiceId,
+          },
+          data: {
+            status: "PENDING",
+          },
+        });
+      }
+
       if (!invoice) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -286,4 +298,11 @@ export const invoiceRouter = createTRPCRouter({
 
       return invoice;
     }),
+  delete: protectedProcedure.input(z.string()).mutation(({ ctx, input }) => {
+    return ctx.prisma.invoice.delete({
+      where: {
+        id: input,
+      },
+    });
+  }),
 });

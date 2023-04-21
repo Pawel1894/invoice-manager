@@ -12,8 +12,9 @@ import Image from "next/image";
 
 type Props = {
   setIsEmailPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsInsertOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsInsertOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   initData: Invoice;
+  isDetails?: boolean;
 };
 
 const valSchema = Yup.object({
@@ -27,8 +28,10 @@ export default function EmailForm({
   setIsEmailPopupOpen,
   initData,
   setIsInsertOpen,
+  isDetails,
 }: Props) {
   const emailFormRef = useRef<FormikProps<emailForm>>(null);
+  const utils = api.useContext();
   const [serverErrors, setServerErrors] = useState<Array<{
     name: string;
     value: string | undefined;
@@ -78,6 +81,9 @@ export default function EmailForm({
           toast.error(error.message);
         }
       },
+      onSettled: async () => {
+        if (isDetails) await utils.invoice.get.invalidate();
+      },
     });
   return (
     <div className="absolute  top-0 left-0 z-10 flex h-screen w-screen items-center justify-center bg-accent-800">
@@ -97,21 +103,24 @@ export default function EmailForm({
                 Invoice sent succesfully!
               </p>
             </div>
+
             <div className="mt-6 flex gap-4">
               <Button
                 onClick={() => {
                   setIsEmailPopupOpen(false);
-                  setIsInsertOpen(false);
+                  if (setIsInsertOpen) setIsInsertOpen(false);
                 }}
               >
                 Close
               </Button>
-              <Button
-                onClick={() => setIsEmailPopupOpen(false)}
-                stylemode="primary"
-              >
-                New invoice
-              </Button>
+              {!isDetails ? (
+                <Button
+                  onClick={() => setIsEmailPopupOpen(false)}
+                  stylemode="primary"
+                >
+                  New invoice
+                </Button>
+              ) : null}
             </div>
           </div>
         ) : (
