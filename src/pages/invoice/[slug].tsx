@@ -4,7 +4,7 @@ import superjson from "superjson";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import Heading from "~/components/Invoice/Heading";
 import Layout from "~/components/Layout";
 import { appRouter } from "~/server/api/root";
@@ -23,6 +23,12 @@ export default function InvoicePage() {
   const { data: theme } = api.user.getPrefTheme.useQuery(undefined, {
     refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    if (theme?.darkMode) {
+      document.getElementsByTagName("body")[0]?.classList.add("dark");
+    }
+  }, []);
 
   const { data: invoice } = api.invoice.get.useQuery(slug as string);
   return (
@@ -51,7 +57,7 @@ export default function InvoicePage() {
                 Go back
               </span>
             </button>
-            <Heading status={invoice?.status} />
+            <Heading invoiceId={slug as string} status={invoice?.status} />
             <div className="mt-4 max-h-[calc(100vh-280px)] overflow-y-auto overflow-x-hidden rounded-lg bg-white px-6 py-6 shadow-light dark:bg-neutral-100">
               <div className="flex flex-col gap-y-8 lg:flex-row lg:justify-between">
                 <div className="flex flex-col">

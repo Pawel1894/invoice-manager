@@ -267,4 +267,23 @@ export const invoiceRouter = createTRPCRouter({
         });
       }
     }),
+  setStatus: protectedProcedure
+    .input(
+      z.object({
+        status: z.enum(["DRAFT", "PENDING", "PAID"]),
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const invoice = await ctx.prisma.invoice.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: input.status,
+        },
+      });
+
+      return invoice;
+    }),
 });
