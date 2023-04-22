@@ -11,9 +11,15 @@ type Props = {
   status?: Status;
   invoiceId: string;
   openSendPopup: () => void;
+  setIsDeletePromptOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Heading({ status, invoiceId, openSendPopup }: Props) {
+export default function Heading({
+  status,
+  invoiceId,
+  openSendPopup,
+  setIsDeletePromptOpen,
+}: Props) {
   const queryClient = useQueryClient();
   const utils = api.useContext();
 
@@ -112,7 +118,11 @@ export default function Heading({ status, invoiceId, openSendPopup }: Props) {
             ? "Mark as Paid"
             : "Mark as Pending"}
         </Button>
-        <Button className="hidden lg:block" stylemode="danger">
+        <Button
+          className="hidden lg:block"
+          stylemode="danger"
+          onClick={() => setIsDeletePromptOpen(true)}
+        >
           Delete
         </Button>
         <Button

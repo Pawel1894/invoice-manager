@@ -5,7 +5,6 @@ import { createTRPCRouter } from "~/server/api/trpc";
 import { assingInvoiceItems, createInvoice } from "../helpers/InvoiceHelper";
 import { sendEmail } from "~/utils/mailer";
 import { generateInvoiceDoc } from "~/utils/pdf";
-import { inputCSS } from "react-select/dist/declarations/src/components/Input";
 
 const CreateInvoiceSchema = z.object({
   name: z.string().max(80, "too long!").nonempty("can't be empty"),

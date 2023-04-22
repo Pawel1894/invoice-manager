@@ -106,7 +106,7 @@ model InvoiceItem {
     tax       Float
     gross     Float
     net       Float
-    Invoice   Invoice @relation(fields: [invoiceId], references: [id])
+    Invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
     invoiceId String
 }
 

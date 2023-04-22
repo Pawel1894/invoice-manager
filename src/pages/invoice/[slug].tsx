@@ -13,10 +13,11 @@ import { api } from "~/utils/api";
 import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 import Items from "~/components/Invoice/Items";
-import { countryName, formatCurrency } from "~/utils/calcs";
-import { Invoice } from "@prisma/client";
+import { type countryName, formatCurrency } from "~/utils/calcs";
+import type { Invoice } from "@prisma/client";
 import { toast } from "react-toastify";
 import EmailForm from "~/components/Form/EmailForm";
+import DeleteForm from "~/components/Form/DeleteForm";
 
 dayjs.extend(LocalizedFormat);
 
@@ -24,7 +25,7 @@ export default function InvoicePage() {
   const router = useRouter();
   const { slug } = router.query;
   const [isEmailPopupOpen, setIsEmailPopupOpen] = useState(false);
-  const [clientEmailData, setClientEmailData] = useState<Invoice>();
+  const [isDeletePromptOpen, setIsDeletePromptOpen] = useState(false);
   const { data: theme } = api.user.getPrefTheme.useQuery(undefined, {
     refetchOnWindowFocus: false,
   });
@@ -47,7 +48,6 @@ export default function InvoicePage() {
 
   function openSendPopup() {
     if (invoice) {
-      setClientEmailData(invoice);
       setIsEmailPopupOpen(true);
     }
   }
@@ -60,13 +60,20 @@ export default function InvoicePage() {
 
       <Layout isDarkMode={theme?.darkMode ?? false}>
         <>
-          {isEmailPopupOpen && clientEmailData && (
+          {isEmailPopupOpen && invoice ? (
             <EmailForm
               isDetails={true}
               setIsEmailPopupOpen={setIsEmailPopupOpen}
-              initData={clientEmailData}
+              initData={invoice}
             />
-          )}
+          ) : null}
+          {isDeletePromptOpen && invoice ? (
+            <DeleteForm
+              setIsOpen={setIsDeletePromptOpen}
+              invoiceId={invoice?.id}
+              number={invoice?.number}
+            />
+          ) : null}
           <div className="mx-6 pt-8 pb-5 md:mx-12 lg:pt-20">
             {status === "success" && !invoice ? (
               <div>
@@ -115,6 +122,7 @@ export default function InvoicePage() {
                   openSendPopup={openSendPopup}
                   invoiceId={slug as string}
                   status={invoice?.status}
+                  setIsDeletePromptOpen={setIsDeletePromptOpen}
                 />
                 <div className="mt-4 max-h-[calc(100vh-280px)] overflow-y-auto overflow-x-hidden rounded-lg bg-white px-6 py-6 shadow-light dark:bg-neutral-100">
                   <div className="flex flex-col gap-y-8 lg:flex-row lg:justify-between">
