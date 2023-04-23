@@ -1,156 +1,37 @@
 import { ErrorMessage, Form, Formik, type FormikProps } from "formik";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Button from "../Button";
 import CustomInput from "./CustomInput";
 import CustomDatePicker from "./CustomDatePicker";
 import FormikCustomDropdown from "./FormikCustomDropdown";
 import ItemsInput from "./ItemsInput";
-import * as Yup from "yup";
 import { api } from "~/utils/api";
 import { toast } from "react-toastify";
 import ClientAutocomplete from "./ClientAutocomplete";
 import LoadIndicator from "../LoadIndicator";
-import EmailForm from "./EmailForm";
-import type { Invoice } from "@prisma/client";
+import type { Invoice, InvoiceItem } from "@prisma/client";
+import { type FormValues, valSchema } from "./InvoiceInsert";
+import dayjs from "dayjs";
 
-export type FormValues = {
-  name: string;
-  idNo: string;
-  clientId: string;
-  streetAddress: string;
-  city: string;
-  postCode: string;
-  country: string;
-  clientName: string;
-  clientEmail: string;
-  clientStreetAddress: string;
-  clientCity: string;
-  clientPostCode: string;
-  clientCountry: string;
-  invoiceDate: Date;
-  paymentTerms: number;
-  projectDescription: string;
-  invoiceNum: string;
-  bankAccount: string;
-  currency: string;
-  items: Array<{
-    name: string;
-    quantity: number;
-    price: number;
-    tax: number;
-    net: number;
-    gross: number;
-  }>;
-};
-
-export const valSchema = Yup.object({
-  name: Yup.string().max(80, "too long!").required("can't be empty"),
-  idNo: Yup.string().max(40, "too long!"),
-  clientId: Yup.string().max(40, "too long!"),
-  streetAddress: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
-  city: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
-  postCode: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
-  country: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
-  clientName: Yup.string().max(40, "too long!").required("can't be empty"),
-  clientStreetAddress: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
-  clientCity: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
-  clientPostCode: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
-  currency: Yup.string(),
-  invoiceNum: Yup.string().required("can't be empty"),
-  clientCountry: Yup.string()
-    .min(1, "too short!")
-    .max(40, "too long!")
-    .required("can't be empty"),
-  invoiceDate: Yup.date().required("can't be empty"),
-  clientEmail: Yup.string().email("must be a valid email"),
-  projectDescription: Yup.string(),
-  paymentTerms: Yup.number().min(1).required("can't be empty"),
-  items: Yup.array(
-    Yup.object({
-      name: Yup.string()
-        .min(1, "too short!")
-        .max(40, "too long!")
-        .required("can't be empty"),
-      quantity: Yup.number()
-        .positive("can't be negative")
-        .required("must be a number"),
-      price: Yup.number().required("must be a number"),
-      tax: Yup.number().required("must be a number"),
-      net: Yup.number().required("must be a number"),
-      gross: Yup.number().required("must be a number"),
-    })
-  ),
-});
-
-export default function InvoiceInsert({
-  setIsInsertOpen,
+export default function InvoiceEdit({
+  setIsEditOpen,
+  initData,
 }: {
-  setIsInsertOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  initData: Invoice & {
+    items: InvoiceItem[];
+  };
 }) {
   const formRef = useRef<FormikProps<FormValues>>(null);
   const errorSummaryRef = useRef<HTMLDivElement>(null);
-  const [isEmailPopupOpen, setIsEmailPopupOpen] = useState(false);
-  const [clientEmailData, setClientEmailData] = useState<Invoice>();
-  const { refetch: refetchInit } = api.invoice.lastUserData.useQuery(
-    undefined,
-    {
-      onSettled: (data) => {
-        if (formRef.current) {
-          formRef.current.resetForm();
-          formRef.current.initialValues.streetAddress =
-            data?.streetAddress ?? "";
-          formRef.current.initialValues.bankAccount = data?.bankAccount ?? "";
-          formRef.current.initialValues.city = data?.city ?? "";
-          formRef.current.initialValues.country = data?.country ?? "";
-          formRef.current.initialValues.postCode = data?.postCode ?? "";
-          formRef.current.initialValues.name = data?.name ?? "";
-          formRef.current.initialValues.idNo = data?.idNo ?? "";
-        }
-      },
-      refetchOnWindowFocus: false,
-    }
-  );
+  const utils = api.useContext();
 
   const [serverErrors, setServerErrors] = useState<Array<{
     name: string;
     value: string | undefined;
   }> | null>(null);
-  const [submitAction, setSubmitAction] = useState<"DRAFT" | "PENDING">(
-    "DRAFT"
-  );
-  const ctx = api.useContext();
 
-  const {
-    mutate: createInvoice,
-    isLoading,
-    isError,
-  } = api.invoice.create.useMutation({
-    onSuccess: () => {
-      void ctx.invoice.getInvoices.invalidate();
-      formRef.current?.resetForm();
-      toast.success("Invoice created!");
-    },
+  const { mutate: update } = api.invoice.update.useMutation({
     onError: (error) => {
       if (error.data?.zodError && error.data?.zodError.fieldErrors) {
         Object.keys(error.data?.zodError.fieldErrors).forEach((item) => {
@@ -180,87 +61,59 @@ export default function InvoiceInsert({
         toast.error(error.message);
       }
     },
-    onSettled: async (data) => {
-      await refetchInit();
-      if (submitAction === "PENDING") {
-        setClientEmailData(data);
-        setIsEmailPopupOpen(true);
-      }
+    onSuccess: async () => {
+      setIsEditOpen(false);
+      await utils.invoice.get.invalidate();
+      toast.success("Updated");
     },
   });
 
-  useEffect(() => {
-    if (isError && serverErrors) {
-      errorSummaryRef.current?.scrollIntoView();
-    }
-  }, [isError, serverErrors]);
-
-  function handleSubmit(type: "DRAFT" | "PENDING") {
-    setServerErrors(null);
-    if (formRef) {
-      setSubmitAction(type);
-      formRef.current?.handleSubmit();
-    }
-  }
-
   return (
     <>
-      {isEmailPopupOpen && clientEmailData && (
-        <EmailForm
-          setIsInsertOpen={setIsInsertOpen}
-          setIsEmailPopupOpen={setIsEmailPopupOpen}
-          initData={clientEmailData}
-        />
-      )}
       <div className="h-[calc(100vh-228px)] overflow-x-hidden overflow-y-scroll pb-24 lg:h-[calc(100vh-140px)]">
         <h1 className=" ml-6 mb-5 block text-2xl font-bold text-neutral-500 dark:text-white lg:ml-0 lg:mb-11 lg:text-3xl">
-          New Invoice
+          Edit #{initData.number}
         </h1>
         <Formik
           innerRef={formRef}
           validationSchema={valSchema}
           initialValues={{
             currency: "US",
-            city: "",
-            name: "",
-            idNo: "",
-            clientId: "",
-            clientCity: "",
-            clientCountry: "",
-            clientEmail: "",
-            clientName: "",
-            clientPostCode: "",
-            clientStreetAddress: "",
-            country: "",
-            postCode: "",
-            projectDescription: "",
-            streetAddress: "",
-            invoiceNum: "",
-            bankAccount: "",
-            items: [
-              {
-                name: "",
-                quantity: 1,
-                price: 0,
-                tax: 0,
-                net: 0,
-                gross: 0,
-              },
-            ],
-            invoiceDate: new Date(),
-            paymentTerms: 1,
+            city: initData.city,
+            name: initData.name,
+            idNo: initData.idNo,
+            clientId: initData.clientId,
+            clientCity: initData.clientCity,
+            clientCountry: initData.clientCountry,
+            clientEmail: initData.clientEmail,
+            clientName: initData.clientName,
+            clientPostCode: initData.clientPostCode,
+            clientStreetAddress: initData.clientStreetAddress,
+            country: initData.country,
+            postCode: initData.postCode,
+            projectDescription: initData.decription,
+            streetAddress: initData.streetAddress,
+            invoiceNum: initData.number,
+            bankAccount: initData.bankAccount,
+            items: [...initData.items],
+            invoiceDate: initData.invoiceDate,
+            paymentTerms: dayjs(initData.dueDate).diff(
+              initData.invoiceDate,
+              "days"
+            ),
           }}
-          onSubmit={(value) => {
-            const requestData = {
-              ...value,
-              status: submitAction,
-            };
-
-            createInvoice(requestData);
+          onSubmit={(value, otp) => {
+            update({
+              id: initData.id,
+              InvoiceSchema: {
+                ...value,
+                status: initData.status,
+              },
+            });
           }}
         >
           <Form data-testid="insert-form">
-            {isLoading ? (
+            {false ? (
               <div className="flex justify-center">
                 <LoadIndicator />
               </div>
@@ -637,29 +490,21 @@ export default function InvoiceInsert({
       <div className="flex items-center justify-center gap-x-2 bg-white py-[1.375rem] shadow-upper dark:bg-transparent dark:shadow-none lg:justify-end lg:bg-transparent lg:px-6 lg:shadow-none">
         <Button
           type="button"
-          stylemode="default"
-          className="lg:mr-auto"
           onClick={() => {
-            setIsInsertOpen(false);
+            setIsEditOpen(false);
             formRef.current?.resetForm();
           }}
         >
           Discard
         </Button>
         <Button
-          data-testid="insert-draft"
-          type="submit"
-          stylemode="accent"
-          onClick={() => handleSubmit("DRAFT")}
-        >
-          Save as Draft
-        </Button>
-        <Button
           type="submit"
           stylemode="primary"
-          onClick={() => handleSubmit("PENDING")}
+          onClick={() => {
+            formRef.current?.handleSubmit();
+          }}
         >
-          Save & Send
+          Save Changes
         </Button>
       </div>
     </>

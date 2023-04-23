@@ -2,11 +2,11 @@ import React from "react";
 
 type Props = {
   isOpen: boolean;
-  setIsInsertOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   children: JSX.Element;
 };
 
-export default function Popup({ isOpen, setIsInsertOpen, children }: Props) {
+export default function Popup({ isOpen, setIsOpen, children }: Props) {
   return (
     <div
       className={`${
@@ -20,7 +20,7 @@ export default function Popup({ isOpen, setIsInsertOpen, children }: Props) {
       >
         <button
           className="mb-6 flex items-center gap-x-6 pl-6 text-sm font-bold text-neutral-500 md:hidden"
-          onClick={() => setIsInsertOpen(false)}
+          onClick={() => setIsOpen(false)}
         >
           <svg width="7" height="10" xmlns="http://www.w3.org/2000/svg">
             <path

@@ -18,6 +18,8 @@ import type { Invoice } from "@prisma/client";
 import { toast } from "react-toastify";
 import EmailForm from "~/components/Form/EmailForm";
 import DeleteForm from "~/components/Form/DeleteForm";
+import Popup from "~/components/Popup";
+import InvoiceEdit from "~/components/Form/InvoiceEdit";
 
 dayjs.extend(LocalizedFormat);
 
@@ -26,6 +28,7 @@ export default function InvoicePage() {
   const { slug } = router.query;
   const [isEmailPopupOpen, setIsEmailPopupOpen] = useState(false);
   const [isDeletePromptOpen, setIsDeletePromptOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const { data: theme } = api.user.getPrefTheme.useQuery(undefined, {
     refetchOnWindowFocus: false,
   });
@@ -60,6 +63,11 @@ export default function InvoicePage() {
 
       <Layout isDarkMode={theme?.darkMode ?? false}>
         <>
+          {invoice ? (
+            <Popup isOpen={isEditOpen} setIsOpen={setIsEditOpen}>
+              <InvoiceEdit initData={invoice} setIsEditOpen={setIsEditOpen} />
+            </Popup>
+          ) : null}
           {isEmailPopupOpen && invoice ? (
             <EmailForm
               isDetails={true}
@@ -123,8 +131,9 @@ export default function InvoicePage() {
                   invoiceId={slug as string}
                   status={invoice?.status}
                   setIsDeletePromptOpen={setIsDeletePromptOpen}
+                  setIsEditOpen={setIsEditOpen}
                 />
-                <div className="mt-4 max-h-[calc(100vh-280px)] overflow-y-auto overflow-x-hidden rounded-lg bg-white px-6 py-6 shadow-light dark:bg-neutral-100">
+                <div className="mt-4 max-h-[calc(100vh-19rem)] overflow-y-auto overflow-x-hidden rounded-lg bg-white px-6 py-6 shadow-light dark:bg-neutral-100 lg:max-h-[calc(100vh-250px)]">
                   <div className="flex flex-col gap-y-8 lg:flex-row lg:justify-between">
                     <div className="flex flex-col">
                       <span className="font-bold dark:text-white">
@@ -136,6 +145,7 @@ export default function InvoicePage() {
                       </span>
                     </div>
                     <div className="flex flex-col text-sm text-neutral-900">
+                      <span>{invoice?.name}</span>
                       <span>{invoice?.streetAddress}</span>
                       <span>{invoice?.city}</span>
                       <span>{invoice?.postCode}</span>
@@ -201,31 +211,33 @@ export default function InvoicePage() {
                     </div>
                   </div>
                   {invoice?.items?.length ? (
-                    <Items
-                      currencyCountry={invoice.currencyCountry}
-                      items={invoice.items}
-                    />
+                    <>
+                      <Items
+                        currencyCountry={invoice.currencyCountry}
+                        items={invoice.items}
+                      />
+                      <div className="rounded-b-lg bg-accent-400 p-6 text-white dark:bg-neutral-500">
+                        <div className="flex justify-between">
+                          <span>Net Total</span>
+                          <span className="font-bold">
+                            {formatCurrency(
+                              invoice?.currencyCountry as countryName,
+                              invoice?.totalAmount ?? 0
+                            )}
+                          </span>
+                        </div>
+                        <div className="mt-4 flex justify-between">
+                          <span>Gross Total</span>
+                          <span className="font-bold">
+                            {formatCurrency(
+                              invoice?.currencyCountry as countryName,
+                              invoice?.grossTotalAmount ?? 0
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    </>
                   ) : null}
-                  <div className="rounded-b-lg bg-accent-400 p-6 text-white dark:bg-neutral-500">
-                    <div className="flex justify-between">
-                      <span>Net Total</span>
-                      <span className="font-bold">
-                        {formatCurrency(
-                          invoice?.currencyCountry as countryName,
-                          invoice?.totalAmount ?? 0
-                        )}
-                      </span>
-                    </div>
-                    <div className="mt-4 flex justify-between">
-                      <span>Gross Total</span>
-                      <span className="font-bold">
-                        {formatCurrency(
-                          invoice?.currencyCountry as countryName,
-                          invoice?.grossTotalAmount ?? 0
-                        )}
-                      </span>
-                    </div>
-                  </div>
                 </div>
               </div>
             )}

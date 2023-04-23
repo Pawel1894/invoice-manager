@@ -2,11 +2,16 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure } from "~/server/api/trpc";
 import { createTRPCRouter } from "~/server/api/trpc";
-import { assingInvoiceItems, createInvoice } from "../helpers/InvoiceHelper";
+import {
+  assingInvoiceItems,
+  createInvoice,
+  updateInvoice,
+  updateInvoiceItems,
+} from "../helpers/InvoiceHelper";
 import { sendEmail } from "~/utils/mailer";
 import { generateInvoiceDoc } from "~/utils/pdf";
 
-const CreateInvoiceSchema = z.object({
+const InvoiceSchema = z.object({
   name: z.string().max(80, "too long!").nonempty("can't be empty"),
   idNo: z.string().max(40, "too long!"),
   clientId: z.string().max(40, "too long!"),
@@ -55,7 +60,7 @@ const CreateInvoiceSchema = z.object({
   ),
 });
 
-export type CreateInvoiceInput = z.infer<typeof CreateInvoiceSchema>;
+export type InvoiceInput = z.infer<typeof InvoiceSchema>;
 
 export const invoiceRouter = createTRPCRouter({
   getInvoices: protectedProcedure
@@ -108,7 +113,7 @@ export const invoiceRouter = createTRPCRouter({
     });
   }),
   create: protectedProcedure
-    .input(CreateInvoiceSchema)
+    .input(InvoiceSchema)
     .mutation(async ({ ctx, input }) => {
       const invoice = await createInvoice(
         input,
@@ -124,6 +129,28 @@ export const invoiceRouter = createTRPCRouter({
       }
 
       await assingInvoiceItems(input.items, invoice.id, ctx.prisma);
+
+      return invoice;
+    }),
+  update: protectedProcedure
+    .input(
+      z.object({
+        InvoiceSchema,
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const invoice = await updateInvoice(
+        input.id,
+        input.InvoiceSchema,
+        ctx.prisma
+      );
+
+      await updateInvoiceItems(
+        input.InvoiceSchema.items,
+        invoice.id,
+        ctx.prisma
+      );
 
       return invoice;
     }),

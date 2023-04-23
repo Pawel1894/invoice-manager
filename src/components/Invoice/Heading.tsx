@@ -12,6 +12,7 @@ type Props = {
   invoiceId: string;
   openSendPopup: () => void;
   setIsDeletePromptOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function Heading({
@@ -19,6 +20,7 @@ export default function Heading({
   invoiceId,
   openSendPopup,
   setIsDeletePromptOpen,
+  setIsEditOpen,
 }: Props) {
   const queryClient = useQueryClient();
   const utils = api.useContext();
@@ -104,7 +106,11 @@ export default function Heading({
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <Button className="hidden lg:block" stylemode="default">
+        <Button
+          className="hidden lg:block"
+          stylemode="default"
+          onClick={() => setIsEditOpen(true)}
+        >
           Edit
         </Button>
         <Button

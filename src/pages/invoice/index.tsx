@@ -49,7 +49,7 @@ export default function Invoice() {
       </Head>
       <Layout isDarkMode={theme?.darkMode ?? false}>
         <>
-          <Popup isOpen={isInsertOpen} setIsInsertOpen={setIsInsertOpen}>
+          <Popup isOpen={isInsertOpen} setIsOpen={setIsInsertOpen}>
             <CreateInvoiceForm setIsInsertOpen={setIsInsertOpen} />
           </Popup>
 
@@ -101,7 +101,7 @@ export default function Invoice() {
                 <NoInvoices />
               </div>
             ) : (
-              <div className="mx-auto mt-8 flex h-[calc(100vh-14rem)] max-w-screen-lg flex-col gap-4 overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-11.5rem)]">
+              <div className="mx-auto mt-8 flex h-[calc(100vh-13rem)] max-w-screen-lg flex-col gap-4 overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-11.5rem)]">
                 {invoicesData.map((invoice) => {
                   return <InvoiceDisplay key={invoice.id} {...invoice} />;
                 })}
