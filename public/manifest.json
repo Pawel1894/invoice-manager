@@ -11,7 +11,7 @@
   ],
   "theme_color": "#FFFFFF",
   "background_color": "#FFFFFF",
-  "start_url": "/",
+  "start_url": "/invoice",
   "display": "standalone",
   "orientation": "portrait"
 }
