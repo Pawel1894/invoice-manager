@@ -31,7 +31,11 @@ const Home: NextPage = () => {
 
   if (status === "authenticated") {
     void router.push("/invoice");
-    return null;
+    return (
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <LoadIndicator />
+      </div>
+    );
   }
 
   function emailLoginHandler() {
