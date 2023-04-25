@@ -1,11 +1,7 @@
 import { type PrismaClient } from "@prisma/client";
 import { type InvoiceInput } from "../routers/invoice";
 
-export async function updateInvoice(
-  id: string,
-  input: InvoiceInput,
-  prisma: PrismaClient
-) {
+export async function updateInvoice(input: InvoiceInput, prisma: PrismaClient) {
   const dueDate = new Date(input.invoiceDate);
   dueDate.setDate(dueDate.getDate() + input.paymentTerms);
 
@@ -22,7 +18,7 @@ export async function updateInvoice(
 
   const invoice = await prisma.invoice.update({
     where: {
-      id: id,
+      id: input.id,
     },
     data: {
       number: input.invoiceNum,

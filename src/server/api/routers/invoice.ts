@@ -12,6 +12,7 @@ import { sendEmail } from "~/utils/mailer";
 import { generateInvoiceDoc } from "~/utils/pdf";
 
 const InvoiceSchema = z.object({
+  id: z.string().optional(),
   name: z.string().max(80, "too long!").nonempty("can't be empty"),
   idNo: z.string().max(40, "too long!"),
   clientId: z.string().max(40, "too long!"),
@@ -133,24 +134,18 @@ export const invoiceRouter = createTRPCRouter({
       return invoice;
     }),
   update: protectedProcedure
-    .input(
-      z.object({
-        InvoiceSchema,
-        id: z.string(),
-      })
-    )
+    .input(InvoiceSchema)
     .mutation(async ({ ctx, input }) => {
-      const invoice = await updateInvoice(
-        input.id,
-        input.InvoiceSchema,
-        ctx.prisma
-      );
+      if (!input.id) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Invoice not found",
+        });
+      }
 
-      await updateInvoiceItems(
-        input.InvoiceSchema.items,
-        invoice.id,
-        ctx.prisma
-      );
+      const invoice = await updateInvoice(input, ctx.prisma);
+
+      await updateInvoiceItems(input.items, invoice.id, ctx.prisma);
 
       return invoice;
     }),

@@ -1,5 +1,5 @@
 import { ErrorMessage, Form, Formik, type FormikProps } from "formik";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../Button";
 import CustomInput from "./CustomInput";
 import CustomDatePicker from "./CustomDatePicker";
@@ -31,9 +31,13 @@ export default function InvoiceEdit({
     value: string | undefined;
   }> | null>(null);
 
-  const { mutate: update } = api.invoice.update.useMutation({
+  const { mutate: update, isError } = api.invoice.update.useMutation({
     onError: (error) => {
       if (error.data?.zodError && error.data?.zodError.fieldErrors) {
+        console.log(
+          "error.data?.zodError.fieldErrors",
+          error.data?.zodError.fieldErrors
+        );
         Object.keys(error.data?.zodError.fieldErrors).forEach((item) => {
           setServerErrors((prevState) => {
             if (!prevState)
@@ -67,6 +71,12 @@ export default function InvoiceEdit({
       toast.success("Updated");
     },
   });
+
+  useEffect(() => {
+    if (isError && serverErrors) {
+      errorSummaryRef.current?.scrollIntoView();
+    }
+  }, [isError, serverErrors]);
 
   return (
     <>
@@ -102,13 +112,12 @@ export default function InvoiceEdit({
               "days"
             ),
           }}
-          onSubmit={(value, otp) => {
+          onSubmit={(value) => {
+            setServerErrors(null);
             update({
+              ...value,
+              status: initData.status,
               id: initData.id,
-              InvoiceSchema: {
-                ...value,
-                status: initData.status,
-              },
             });
           }}
         >
@@ -492,6 +501,7 @@ export default function InvoiceEdit({
           type="button"
           onClick={() => {
             setIsEditOpen(false);
+            setServerErrors(null);
             formRef.current?.resetForm();
           }}
         >

@@ -641,6 +641,7 @@ export default function InvoiceInsert({
           className="lg:mr-auto"
           onClick={() => {
             setIsInsertOpen(false);
+            setServerErrors(null);
             formRef.current?.resetForm();
           }}
         >
