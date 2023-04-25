@@ -134,14 +134,6 @@ export async function generateInvoiceDoc(
         width: 40,
       });
 
-    doc
-      .font(mainFont)
-      .fontSize(7)
-      .fill("#000")
-      .text(String(doc.page.height), 0, 0, {
-        width: 180,
-      });
-
     doc.font(mainFont).fontSize(7).fill("#000").text(item.name, 60, height, {
       width: 180,
     });

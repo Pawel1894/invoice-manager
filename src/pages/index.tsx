@@ -66,7 +66,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${spartan.variable} font-sans`}>
-        <h1 id="title" className="mb-16 pt-32 text-center text-5xl">
+        <h1 id="title" className="mb-16 pt-16 text-center text-5xl lg:pt-32">
           Sign in to{" "}
           <mark className="bg-transparent text-primary-100">Invoices</mark>{" "}
           Manager
