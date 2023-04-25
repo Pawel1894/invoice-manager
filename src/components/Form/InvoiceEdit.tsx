@@ -123,7 +123,10 @@ export default function InvoiceEdit({
         >
           <Form data-testid="insert-form">
             {false ? (
-              <div className="flex justify-center">
+              <div className="mt-5 flex flex-col items-center justify-center gap-5">
+                <span className="text-lg text-neutral-500 dark:text-neutral-300">
+                  Updating invoice
+                </span>
                 <LoadIndicator />
               </div>
             ) : (

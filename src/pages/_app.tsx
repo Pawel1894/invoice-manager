@@ -11,6 +11,9 @@ import "~/styles/text-editor.css";
 import { ToastContainer } from "react-toastify";
 import Head from "next/head";
 import { useEffect } from "react";
+import dayjs from "dayjs";
+import LocalizedFormat from "dayjs/plugin/localizedFormat";
+dayjs.extend(LocalizedFormat);
 
 declare global {
   interface Window {

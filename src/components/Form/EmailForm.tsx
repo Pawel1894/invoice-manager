@@ -6,7 +6,7 @@ import { type Invoice } from "@prisma/client";
 import CustomTextEditor from "./CustomTextEditor";
 import Button from "../Button";
 import { api } from "~/utils/api";
-import { toast } from "react-toastify";
+import { Id, toast } from "react-toastify";
 import LoadIndicator from "../LoadIndicator";
 import Image from "next/image";
 
@@ -30,6 +30,7 @@ export default function EmailForm({
   setIsInsertOpen,
   isDetails,
 }: Props) {
+  const toastId = React.useRef<Id>();
   const emailFormRef = useRef<FormikProps<emailForm>>(null);
   const utils = api.useContext();
   const [serverErrors, setServerErrors] = useState<Array<{
@@ -38,7 +39,15 @@ export default function EmailForm({
   }> | null>(null);
 
   const { mutate: previewInvoice } = api.invoice.getPdfDoc.useMutation({
+    onMutate: () => {
+      toastId.current = toast("Generating pdf in progress, please wait..", {
+        closeButton: true,
+        type: toast.TYPE.INFO,
+      });
+    },
     onSuccess: (data) => {
+      toast.dismiss(toastId.current);
+
       const a = document.createElement("a");
       a.href = data;
       a.download = `${initData.name} ${initData.number}.pdf`;
@@ -46,7 +55,12 @@ export default function EmailForm({
       a.click();
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.update(toastId.current!, {
+        render: error.message,
+        type: toast.TYPE.ERROR,
+        autoClose: 2000,
+        closeButton: true,
+      });
     },
   });
 

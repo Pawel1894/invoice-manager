@@ -5,7 +5,7 @@ import Button from "../Button";
 import Image from "next/image";
 import { api } from "~/utils/api";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { type Id, toast } from "react-toastify";
 
 type Props = {
   status?: Status;
@@ -22,11 +22,20 @@ export default function Heading({
   setIsDeletePromptOpen,
   setIsEditOpen,
 }: Props) {
+  const toastId = React.useRef<Id>();
   const queryClient = useQueryClient();
   const utils = api.useContext();
 
   const { mutate: previewInvoice } = api.invoice.getPdfDoc.useMutation({
+    onMutate: () => {
+      toastId.current = toast("Downloading pdf, please wait..", {
+        closeButton: true,
+        type: toast.TYPE.INFO,
+      });
+    },
     onSuccess: (data) => {
+      toast.dismiss(toastId.current);
+
       const a = document.createElement("a");
       a.href = data;
       a.download = `invoice-${invoiceId}.pdf`;
@@ -34,7 +43,12 @@ export default function Heading({
       a.click();
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.update(toastId.current!, {
+        render: error.message,
+        type: toast.TYPE.ERROR,
+        autoClose: 2000,
+        closeButton: true,
+      });
     },
   });
 

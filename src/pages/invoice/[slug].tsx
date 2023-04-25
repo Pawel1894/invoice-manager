@@ -11,17 +11,13 @@ import { appRouter } from "~/server/api/root";
 import { createTRPCContext } from "~/server/api/trpc";
 import { api } from "~/utils/api";
 import dayjs from "dayjs";
-import LocalizedFormat from "dayjs/plugin/localizedFormat";
 import Items from "~/components/Invoice/Items";
 import { type countryName, formatCurrency } from "~/utils/calcs";
-import type { Invoice } from "@prisma/client";
 import { toast } from "react-toastify";
 import EmailForm from "~/components/Form/EmailForm";
 import DeleteForm from "~/components/Form/DeleteForm";
 import Popup from "~/components/Popup";
 import InvoiceEdit from "~/components/Form/InvoiceEdit";
-
-dayjs.extend(LocalizedFormat);
 
 export default function InvoicePage() {
   const router = useRouter();

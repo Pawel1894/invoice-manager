@@ -261,7 +261,10 @@ export default function InvoiceInsert({
         >
           <Form data-testid="insert-form">
             {isLoading ? (
-              <div className="flex justify-center">
+              <div className="mt-5 flex flex-col items-center justify-center gap-5">
+                <span className="text-lg text-neutral-500 dark:text-neutral-300">
+                  Saving invoice
+                </span>
                 <LoadIndicator />
               </div>
             ) : (
