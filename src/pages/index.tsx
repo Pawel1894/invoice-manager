@@ -30,9 +30,8 @@ const Home: NextPage = () => {
   }
 
   if (status === "authenticated") {
-    return <span>Logged in</span>;
-    // void router.push("/invoice");
-    // return null;
+    void router.push("/invoice");
+    return null;
   }
 
   function emailLoginHandler() {
