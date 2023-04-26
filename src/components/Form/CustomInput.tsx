@@ -29,7 +29,7 @@ export default function CustomInput({ errorBottom, ...props }: InputProps) {
       </label>
       <input
         disabled={props.stylemode === "disabled"}
-        className={`w-full py-[0.625rem]  font-bold ${
+        className={`w-full py-[0.625rem] pt-[12px]  font-bold ${
           meta.touched && meta.error ? "!border-accent-100" : ""
         } ${
           props.stylemode === "disabled"

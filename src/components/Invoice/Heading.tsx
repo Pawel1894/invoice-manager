@@ -103,7 +103,7 @@ export default function Heading({
         <div
           className={`rounded-md ${
             status ? statusStyle[status].bg : statusStyle["DRAFT"].bg
-          } flex w-[6.5rem] items-center justify-center px-[1rem] py-2`}
+          } flex w-[6.5rem] items-center justify-center px-[1rem] pb-2 pt-[9px]`}
         >
           <span
             className={`mr-2 inline-block h-2 w-2 rounded-full  ${

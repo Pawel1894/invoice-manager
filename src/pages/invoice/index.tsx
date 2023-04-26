@@ -75,7 +75,7 @@ export default function Invoice() {
                 <Filter filters={filters} setFilters={setFilters} />
                 <button
                   data-testid="new-invoice"
-                  className="flex items-center gap-x-2 rounded-3xl bg-primary-100 py-2 pl-2 pr-4 text-sm text-white"
+                  className="flex items-center gap-x-2 rounded-3xl bg-primary-100 py-2 pt-[7px] pl-2 pr-4 text-sm text-white"
                   onClick={() => setIsInsertOpen(true)}
                 >
                   <span className="flex items-center justify-center rounded-full bg-white p-3">

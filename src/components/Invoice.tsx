@@ -47,7 +47,10 @@ export default function Invoice({
       <span className="col-span-1 row-start-2 justify-self-start text-sm text-neutral-300 md:col-auto md:row-auto md:justify-self-auto">
         Due {dayjs(dueDate.toString()).format("LL")}
       </span>
-      <span className="col-span-2 row-start-1 justify-self-end text-right text-sm text-accent-300 dark:text-white md:col-auto md:row-auto md:justify-self-auto md:text-base">
+      <span
+        title={clientName}
+        className="col-span-2 row-start-1 block max-w-full justify-self-end text-right text-sm text-accent-300 dark:text-white md:col-auto md:row-auto md:justify-self-start md:text-base lg:overflow-hidden lg:text-ellipsis lg:whitespace-nowrap lg:text-left"
+      >
         {clientName}
       </span>
       <span
@@ -58,7 +61,7 @@ export default function Invoice({
       </span>
       <div className="row-span-2 flex items-center justify-self-end md:row-auto md:justify-self-end">
         <div
-          className={`rounded-md ${statusStyle[status].bg} flex w-[6.5rem] items-center justify-center px-[1rem] py-2`}
+          className={`rounded-md ${statusStyle[status].bg} flex w-[6.5rem] items-center justify-center px-[1rem] pb-2 pt-[9px]`}
         >
           <span
             className={`mr-2 inline-block h-2 w-2 rounded-full  ${statusStyle[status].accent}`}

@@ -27,7 +27,7 @@ export default function Button({
   return (
     <button
       type={type}
-      className={`rounded-3xl px-4 py-3 text-sm  font-bold   ${
+      className={`rounded-3xl px-4 pb-[0.65rem] pt-[11px] text-sm  font-bold ${
         stylemode ? styles[stylemode] : styles["default"]
       } ${className ? className : ""}`}
       {...props}

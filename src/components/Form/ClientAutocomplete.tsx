@@ -78,7 +78,7 @@ export default function ClientAutocomplete(props: Props) {
             setSelectedClient(null);
             // validateField(name);
           }}
-          className={`w-full py-[0.625rem]  font-bold ${
+          className={`w-full py-[0.625rem] pt-[12px]  font-bold ${
             meta.touched && meta.error ? "!border-accent-100" : ""
           } rounded border border-neutral-900 px-5 text-neutral-500 hover:border-primary-200 focus:border-primary-200 active:border-primary-200 dark:border-neutral-100 dark:bg-neutral-200 dark:text-neutral-800 dark:hover:border-primary-200 dark:focus:border-primary-200 dark:active:border-primary-200  `}
         />

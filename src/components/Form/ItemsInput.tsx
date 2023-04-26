@@ -126,7 +126,7 @@ export default function ItemsInput(props: InputProps) {
 
             <button
               data-testid="insert-new-item"
-              className="mt-12 w-full rounded-3xl bg-neutral-600 py-3 text-center font-bold text-neutral-900 dark:bg-neutral-200 dark:text-neutral-600"
+              className="mt-12 w-full rounded-3xl bg-neutral-600 pb-2 pt-[12px] text-center font-bold text-neutral-900 dark:bg-neutral-200 dark:text-neutral-600"
               type="button"
               onClick={() =>
                 arrayHelpers.push({
