@@ -56,7 +56,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    darkMode      Boolean   @default(false)
+    darkMode      Boolean   @default(true)
     invoices      Invoice[]
 }
 

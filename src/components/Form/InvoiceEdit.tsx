@@ -499,7 +499,7 @@ export default function InvoiceEdit({
         </Formik>
       </div>
 
-      <div className="flex items-center justify-center gap-x-2 bg-white py-[1.375rem] shadow-upper dark:bg-transparent dark:shadow-none lg:justify-end lg:bg-transparent lg:px-6 lg:shadow-none">
+      <div className="flex items-center justify-center gap-x-2 bg-white py-[1.375rem] shadow-upper dark:bg-transparent dark:shadow-none lg:justify-between lg:bg-transparent lg:px-6 lg:shadow-none">
         <Button
           type="button"
           onClick={() => {

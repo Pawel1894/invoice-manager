@@ -75,10 +75,10 @@ export default function Invoice() {
                 <Filter filters={filters} setFilters={setFilters} />
                 <button
                   data-testid="new-invoice"
-                  className="flex items-center gap-x-2 rounded-3xl bg-primary-100 py-2 pt-[7px] pl-2 pr-4 text-sm text-white"
+                  className="flex items-center gap-x-2 rounded-3xl bg-primary-100 py-2 pl-2  pr-4 text-sm text-white hover:bg-primary-200"
                   onClick={() => setIsInsertOpen(true)}
                 >
-                  <span className="flex items-center justify-center rounded-full bg-white p-3">
+                  <span className="flex items-center justify-center rounded-full bg-white p-[10px]">
                     <Image
                       src="/assets/icon-plus.svg"
                       width={10}
@@ -86,7 +86,7 @@ export default function Invoice() {
                       alt="create new invoice"
                     />
                   </span>
-                  <span>
+                  <span className="pt-[2px]">
                     New <span className="hidden md:inline">Invoice</span>
                   </span>
                 </button>
