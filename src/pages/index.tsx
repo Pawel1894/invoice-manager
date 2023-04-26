@@ -128,7 +128,7 @@ const Home: NextPage = () => {
                 Sign In With Email
               </button>
               <p className="mt-4 rounded bg-neutral-800 py-2 px-6 font-normal">
-                You will receive magic link for a password-free sign in.
+                You will receive a magic link for a password-free sign in.
               </p>
             </div>
           </div>
