@@ -2,6 +2,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import Checkbox from "./Checkbox";
 import type { ActiveFilter } from "~/pages/invoice";
+import useClickOutside from "~/hooks/useClickOutside";
 
 type Props = {
   setFilters: React.Dispatch<React.SetStateAction<ActiveFilter>>;
@@ -9,7 +10,9 @@ type Props = {
 };
 
 export default function Filter({ setFilters, filters }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
+  const { isComponentVisible, ref, setIsComponentVisible } =
+    useClickOutside<HTMLUListElement>(false);
 
   const anyActive = filters.Draft || filters.Paid || filters.Pending;
 
@@ -17,7 +20,7 @@ export default function Filter({ setFilters, filters }: Props) {
     <div className="relative">
       <button
         className="flex items-center gap-x-3 font-bold text-neutral-500 dark:text-white"
-        onClick={() => setIsOpen((prevState) => !prevState)}
+        onClick={() => setIsComponentVisible((prevState) => !prevState)}
       >
         <span className={anyActive ? "text-primary-100" : ""}>
           {anyActive
@@ -29,7 +32,7 @@ export default function Filter({ setFilters, filters }: Props) {
           Filter <span className="hidden md:inline">by status</span>
         </span>
         <Image
-          className={`${isOpen ? "rotate-180" : ""} transition-all`}
+          className={`${isComponentVisible ? "rotate-180" : ""} transition-all`}
           src={"/assets/icon-arrow-down.svg"}
           alt="Open statuses list"
           width={12}
@@ -37,8 +40,9 @@ export default function Filter({ setFilters, filters }: Props) {
         />
       </button>
       <ul
+        ref={ref}
         className={`${
-          isOpen ? "block" : "hidden"
+          isComponentVisible ? "block" : "hidden"
         } absolute left-1/2 top-8 w-48 -translate-x-1/2 rounded-lg bg-white p-4 shadow-md dark:bg-neutral-200`}
       >
         <li>

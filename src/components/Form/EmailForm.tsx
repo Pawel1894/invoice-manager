@@ -143,7 +143,7 @@ export default function EmailForm({
             validationSchema={valSchema}
             initialValues={{
               recipient: initData.clientEmail ?? "",
-              emailMessage: `Hi!<br>${initData.clientName} <br><br> I'm sending my invoice in attachments <br><br> Best Regards <br> ${initData.name}`,
+              emailMessage: `Hi, ${initData.clientName}! <br><br> I'm sending my invoice in attachments. <br><br> Best Regards, <br> ${initData.name}`,
             }}
             onSubmit={(value) => {
               console.log(value.emailMessage);
@@ -161,7 +161,10 @@ export default function EmailForm({
                   Send {initData?.number}
                 </h3>
                 <div
-                  onClick={() => setIsEmailPopupOpen(false)}
+                  onClick={() => {
+                    setIsEmailPopupOpen(false);
+                    if (setIsInsertOpen) setIsInsertOpen(false);
+                  }}
                   className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border hover:border-primary-100 hover:text-primary-100 dark:border-neutral-800 dark:text-neutral-800 hover:dark:border-primary-100 hover:dark:text-primary-100"
                 >
                   <span className="mt-1">X</span>
@@ -217,7 +220,7 @@ export default function EmailForm({
                           }
                         >
                           <div className="flex gap-2">
-                            <span>Preview</span>
+                            <span>Preview PDF</span>
                           </div>
                         </Button>
                         <Button type="submit" stylemode="primary">

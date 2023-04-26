@@ -41,7 +41,6 @@ const Home: NextPage = () => {
   function emailLoginHandler() {
     const input = emailRef.current?.value;
     const result = z.coerce.string().email().safeParse(input);
-    console.log(result.success);
     if (result.success) {
       setLoading(true);
       void signIn("email", { email: input });

@@ -68,7 +68,9 @@ export default function InvoiceEdit({
     onSuccess: async () => {
       setIsEditOpen(false);
       await utils.invoice.get.invalidate();
-      toast.success("Updated");
+      toast.success("Updated", {
+        autoClose: 5000,
+      });
     },
   });
 

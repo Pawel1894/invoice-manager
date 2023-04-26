@@ -32,7 +32,7 @@ export default function CustomTextArea({ errorBottom, ...props }: InputProps) {
         {props.label}
       </label>
       <div
-        className={`rounded-md border  hover:border-primary-100 ${
+        className={`rounded-md border border-primary-100  hover:border-primary-100 dark:hover:border-primary-100 ${
           focusIn
             ? "focusIndicator border-primary-100"
             : "border-neutral-900 dark:border-neutral-100"

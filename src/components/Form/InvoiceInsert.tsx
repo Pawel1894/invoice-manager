@@ -12,6 +12,7 @@ import ClientAutocomplete from "./ClientAutocomplete";
 import LoadIndicator from "../LoadIndicator";
 import EmailForm from "./EmailForm";
 import type { Invoice } from "@prisma/client";
+import Link from "next/link";
 
 export type FormValues = {
   name: string;
@@ -146,10 +147,19 @@ export default function InvoiceInsert({
     isLoading,
     isError,
   } = api.invoice.create.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
       void ctx.invoice.getInvoices.invalidate();
       formRef.current?.resetForm();
-      toast.success("Invoice created!");
+      toast.success(
+        <Link className="underline" href={`/invoice/${data.id}`}>
+          Invoice created! click to view
+        </Link>,
+        {
+          autoClose: 5000,
+          closeOnClick: false,
+          closeButton: true,
+        }
+      );
     },
     onError: (error) => {
       if (error.data?.zodError && error.data?.zodError.fieldErrors) {

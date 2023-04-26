@@ -186,7 +186,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <Component {...pageProps} />
         <ReactQueryDevtools initialIsOpen={false} />
       </SessionProvider>
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={3000} />
     </>
   );
 };
