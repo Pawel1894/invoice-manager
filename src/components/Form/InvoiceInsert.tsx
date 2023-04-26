@@ -673,7 +673,7 @@ export default function InvoiceInsert({
           stylemode="primary"
           onClick={() => handleSubmit("PENDING")}
         >
-          Save & Send
+          Save & Continue
         </Button>
       </div>
     </>

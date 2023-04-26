@@ -104,7 +104,7 @@ describe("The invoice insert form", () => {
     cy.get("#clientId").focus().clear().type("test");
     cy.get("#projectDescription").focus().clear().type("test");
     cy.get("[name='items[0].name']").clear().type("test");
-    cy.contains("Save & Send").click();
+    cy.contains("Save & Continue").click();
     cy.wait(1000);
     cy.contains("Send test").should("exist");
   });
