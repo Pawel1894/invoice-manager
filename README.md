@@ -1,12 +1,12 @@
 # [Invoice Manager](https://invoices-manager-nine.vercel.app/)
 
-App for managing invoices with PWA made using T3 stack [deigned by Frontend Mentor](https://www.frontendmentor.io/challenges/invoice-app-i7KaLTQjl) with some additions.
+App for managing invoices with PWA made using T3 stack [deigned by Frontend Mentor](https://www.frontendmentor.io/challenges/invoice-app-i7KaLTQjl) with some additions. I'm using free sendgrid license. If login via email or sending pdf is not working it is probably due to sendgrid limit exceed which resets every 24hrs, sorry for inconvenience.
 
 ## Table of contents
 
 - [Overview](#overview)
   - [Website](#website)
-  - [Features](#features)
+  - [What it contains](#What-it-contains)
 - [Built with](#built-with)
 - [Install process](#install-process)
 - [Build process](#build-process)
@@ -17,14 +17,15 @@ App for managing invoices with PWA made using T3 stack [deigned by Frontend Ment
 
 [App live demo](https://invoices-manager-nine.vercel.app/)
 
-### Features
+### What it contains
 
 - Auth with google and magick email link
 - Dark mode
-- Creating/updating invoices
+- CRUD for invoices
 - PWA
 - Generate invoice PDF
 - Send invoice to email address
+- E2E tests with cypress
 
 ## Built with
 
@@ -43,6 +44,7 @@ App for managing invoices with PWA made using T3 stack [deigned by Frontend Ment
 - [Headless UI](https://headlessui.com/)
 - [Next PWA](https://www.npmjs.com/package/next-pwa)
 - [PDF kit](https://pdfkit.org/)
+- [Cypress](https://docs.cypress.io)
 
 ## Install process
 
