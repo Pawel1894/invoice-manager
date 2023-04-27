@@ -6,7 +6,7 @@ App for managing invoices with PWA made using T3 stack [deigned by Frontend Ment
 
 - [Overview](#overview)
   - [Website](#website)
-  - [Features](#features)
+  - [What it contains](#What it contains)
 - [Built with](#built-with)
 - [Install process](#install-process)
 - [Build process](#build-process)
@@ -17,11 +17,11 @@ App for managing invoices with PWA made using T3 stack [deigned by Frontend Ment
 
 [App live demo](https://invoices-manager-nine.vercel.app/)
 
-### Features
+### What it contains
 
 - Auth with google and magick email link
 - Dark mode
-- Creating/updating invoices
+- CRUD for invoices
 - PWA
 - Generate invoice PDF
 - Send invoice to email address
