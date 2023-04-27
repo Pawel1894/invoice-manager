@@ -25,6 +25,7 @@ App for managing invoices with PWA made using T3 stack [deigned by Frontend Ment
 - PWA
 - Generate invoice PDF
 - Send invoice to email address
+- e2e tests with cypress
 
 ## Built with
 
@@ -43,6 +44,7 @@ App for managing invoices with PWA made using T3 stack [deigned by Frontend Ment
 - [Headless UI](https://headlessui.com/)
 - [Next PWA](https://www.npmjs.com/package/next-pwa)
 - [PDF kit](https://pdfkit.org/)
+- [Cypress](https://docs.cypress.io)
 
 ## Install process
 
