@@ -6,7 +6,7 @@ App for managing invoices with PWA made using T3 stack [deigned by Frontend Ment
 
 - [Overview](#overview)
   - [Website](#website)
-  - [What it contains](#What it contains)
+  - [What it contains](#What-it-contains)
 - [Built with](#built-with)
 - [Install process](#install-process)
 - [Build process](#build-process)
