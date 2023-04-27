@@ -42,6 +42,7 @@ App for managing invoices with PWA made using T3 stack [deigned by Frontend Ment
 - [Yup](https://www.npmjs.com/package/yup)
 - [Headless UI](https://headlessui.com/)
 - [Next PWA](https://www.npmjs.com/package/next-pwa)
+- [PDF kit](https://pdfkit.org/)
 
 ## Install process
 
