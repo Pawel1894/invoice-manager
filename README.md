@@ -1,6 +1,6 @@
 # [Invoice Manager](https://invoices-manager-nine.vercel.app/)
 
-App for managing invoices with PWA made using T3 stack [deigned by Frontend Mentor](https://www.frontendmentor.io/challenges/invoice-app-i7KaLTQjl) with some additions.
+App for managing invoices with PWA made using T3 stack [deigned by Frontend Mentor](https://www.frontendmentor.io/challenges/invoice-app-i7KaLTQjl) with some additions. I'm using free sendgrid license. If login via email or sending pdf is not working it is probably due to sendgrid limit exceed which resets every 24hrs, sorry for inconvenience.
 
 ## Table of contents
 
