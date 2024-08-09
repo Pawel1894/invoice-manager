@@ -1,4 +1,4 @@
-# [Invoice Manager](https://invoices-manager-nine.vercel.app/)
+# Invoice Manager
 
 App for managing invoices that has a PWA and was made with the use of T3 stack. I used the Frontend Mentor design and enriched it with additional features.
 
@@ -17,7 +17,7 @@ I'm using a free SendGrid license, so if logging via email or sending a pdf isnâ
 
 ### Website
 
-[App live demo](https://invoices-manager-nine.vercel.app/)
+[App live demo](https://invoices-manager-nine.vercel.app/) unfortunately not working currently, my free database was turned down.
 
 ### What it contains
 
